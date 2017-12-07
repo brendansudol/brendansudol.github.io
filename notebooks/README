@@ -1,0 +1,13 @@
+Convert jupyter notebooks to markdown for blog posts
+
+---
+
+Set-up:
+
+$ virtualenv venv -p python3
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+
+Example usage:
+
+$ jupyter nbconvert nb/demo.ipynb --config config.py

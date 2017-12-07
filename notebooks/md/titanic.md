@@ -122,7 +122,7 @@ df.head()
 
 
 <div class="html-output">
-    <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+  <div style="max-height:1000px;max-width:1500px;overflow:auto;">
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -298,7 +298,7 @@ df.head()
 
 
 <div class="html-output">
-    <div style="max-height:1000px;max-width:1500px;overflow:auto;">
+  <div style="max-height:1000px;max-width:1500px;overflow:auto;">
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -425,19 +425,19 @@ for col in ['pclass', 'gender', 'age_bin', 'fare_bin']:
 {% endhighlight %}
 
 
-![png](titanic_files/titanic_8_0.png)
+![png](/public/notebooks/md/titanic_files/titanic_8_0.png)
 
 
 
-![png](titanic_files/titanic_8_1.png)
+![png](/public/notebooks/md/titanic_files/titanic_8_1.png)
 
 
 
-![png](titanic_files/titanic_8_2.png)
+![png](/public/notebooks/md/titanic_files/titanic_8_2.png)
 
 
 
-![png](titanic_files/titanic_8_3.png)
+![png](/public/notebooks/md/titanic_files/titanic_8_3.png)
 
 
 
