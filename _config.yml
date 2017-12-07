@@ -23,7 +23,7 @@ keep_files:
   - assets/build
 
 exclude:
-  - assets/src
+  - assets/js
   - ipy-notebooks/notebooks
   - ipy-notebooks/templates
   - node_modules

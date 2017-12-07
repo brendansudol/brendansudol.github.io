@@ -1,5 +1,5 @@
 module.exports = {
-  context: __dirname + '/assets/src',
+  context: __dirname + '/assets/js',
   entry: {
     cleverCounties: './cleverCounties.js',
     colorDots: './colorDots.js',

@@ -13,7 +13,9 @@ permalink: /pay/
 <p id="status"></p>
 
 <script src="https://checkout.stripe.com/checkout.js"></script>
+
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
 <script>
 (function(){
 
@@ -56,7 +58,7 @@ $(window).on('popstate', function() {
     handler.close();
 });
 
-// ping heroku serve to wake it up
+/* ping heroku serve to wake it up */
 $.get('https://paybren.herokuapp.com');
 
 })();

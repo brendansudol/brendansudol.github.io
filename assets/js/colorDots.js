@@ -23,7 +23,7 @@ svg
   .enter()
   .append('circle')
   .attr('cx', function(d, i) {
-    return i % 20 * 38 + 10
+    return (i % 20) * 38 + 10
   })
   .attr('cy', function(d, i) {
     return Math.floor(i / 20) * 38 + 10
@@ -31,7 +31,7 @@ svg
   .attr('r', 3)
   .style('fill', function(d, i) {
     return d3
-      .rgb(color(i % 20 * 38 + 10))
+      .rgb(color((i % 20) * 38 + 10))
       .darker(Math.floor(i / 20) * (1 / 4))
       .toString()
   })
@@ -39,7 +39,11 @@ svg
   .duration(1500)
   .attr('r', 18.5)
   .each('end', function() {
-    d3.select(this).transition().duration(1500).attr('r', 3)
+    d3
+      .select(this)
+      .transition()
+      .duration(1500)
+      .attr('r', 3)
   })
 
 function mousemove() {
@@ -55,7 +59,10 @@ function mousemove() {
     .attr('transform', 'translate(' + x + ',' + y + ')scale(2)')
     .style(
       'fill',
-      d3.rgb(color(x)).darker(d3.max([0, y - 10]) / width * 3.75).toString()
+      d3
+        .rgb(color(x))
+        .darker(d3.max([0, y - 10]) / width * 3.75)
+        .toString()
     )
     .each('end', function() {
       d3
