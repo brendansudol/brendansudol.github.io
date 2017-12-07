@@ -40,6 +40,7 @@ pizza? See below!
 [bag_words]: http://en.wikipedia.org/wiki/Bag-of-words_model
 [model_2_code]: http://nbviewer.ipython.org/github/brendansudol/kaggle-pizza/blob/master/ipy-notebooks/model-2-gradient-boosting.ipynb
 
+
 {% highlight python %}
 import json, re
 import pandas as pd

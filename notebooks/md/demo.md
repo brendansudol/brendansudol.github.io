@@ -1,3 +1,5 @@
+title: "demo"
+
 {% highlight python %}
 1+1
 {% endhighlight %}

@@ -2,7 +2,8 @@
 .jekyll-metadata
 .DS_Store
 
-/node_modules
+node_modules
+venv
 
 npm-debug.log*
 

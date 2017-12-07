@@ -33,6 +33,9 @@ td { vertical-align: top }
 }
 
 .dataframe {
+  font-family: $monospace-font-family;
+  font-size: 11px;
   margin-bottom: 1rem;
+
   th, td { border: 1px solid #ddd; } 
 }

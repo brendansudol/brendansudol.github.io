@@ -24,13 +24,6 @@ have a [repo][repo] on GitHub too if you're in to that sort of thing.
 [titanic]: http://www.kaggle.com/c/titanic
 [repo]: https://github.com/brendansudol/kaggle-titanic
 
-{% highlight python %}
-%pylab inline
-{% endhighlight %}
-
-    Populating the interactive namespace from numpy and matplotlib
-
-
 
 {% highlight python %}
 import itertools
@@ -453,19 +446,19 @@ for col in ['pclass', 'gender', 'age_bin', 'fare_bin']:
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_0.png)
+![png](/notebooks/md/titanic_files/titanic_8_0.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_1.png)
+![png](/notebooks/md/titanic_files/titanic_8_1.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_2.png)
+![png](/notebooks/md/titanic_files/titanic_8_2.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_3.png)
+![png](/notebooks/md/titanic_files/titanic_8_3.png)
 
 
 

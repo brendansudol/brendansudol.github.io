@@ -1,5 +1,0 @@
-converting ipython notebooks to markdown for blog posts...
-
-example usage:
-
-$ ipython nbconvert notebooks/test.ipynb --config config.py

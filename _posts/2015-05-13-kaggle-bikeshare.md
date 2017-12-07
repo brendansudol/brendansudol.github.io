@@ -41,6 +41,7 @@ Enough with the chit chat, here's the code (github repo [here][github_repo]):
 [capital_bike]: http://www.capitalbikeshare.com/system-data
 [github_repo]: https://github.com/brendansudol/kaggle-bike-share
 
+
 {% highlight python %}
 import pandas as pd
 import numpy as np
@@ -268,7 +269,7 @@ by_day.hist(figsize=(10, 3));
 
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_5_1.png)
+![png](/notebooks/md/bikeshare_files/bikeshare_5_1.png)
 
 
 
@@ -278,7 +279,7 @@ dg.groupby(['year', 'month'])['count'].agg(sum).plot(kind='bar');
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_6_0.png)
+![png](/notebooks/md/bikeshare_files/bikeshare_6_0.png)
 
 
 
@@ -290,7 +291,7 @@ by_dow.plot(kind='bar', width=0.8);
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_7_0.png)
+![png](/notebooks/md/bikeshare_files/bikeshare_7_0.png)
 
 
 
@@ -302,7 +303,7 @@ by_hour.plot(kind='bar', figsize=(8,4), width=0.8);
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_8_0.png)
+![png](/notebooks/md/bikeshare_files/bikeshare_8_0.png)
 
 
 
@@ -314,7 +315,7 @@ dg.groupby('temp_int')['count'].agg('median').plot();
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_9_0.png)
+![png](/notebooks/md/bikeshare_files/bikeshare_9_0.png)
 
 
 
