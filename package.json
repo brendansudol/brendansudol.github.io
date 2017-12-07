@@ -7,7 +7,7 @@
     "dev": "concurrently -k 'webpack -w' 'bundle exec jekyll serve'",
     "build": "npm run clean && NODE_ENV=production webpack -p && bundle exec jekyll build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d _site -b master -m \"auto site build\""
+    "deploy": "gh-pages -d _site -b master -m \"auto build\""
   },
   "dependencies": {
     "d3": "^3.5.17",
