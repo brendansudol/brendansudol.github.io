@@ -25,7 +25,6 @@ keep_files:
 exclude:
   - assets/src
   - node_modules
-  - CNAME
   - NOTES
   - Gemfile
   - Gemfile.lock
