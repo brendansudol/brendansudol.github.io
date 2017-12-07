@@ -1,28 +1,4 @@
----
-layout:     post
-title:      Predicting Titantic survivorship
-date:       2015-05-03
----
-
-At work recently, I had the chance to work on and learn about some interesting
-machine learning problems (around customer retention) and in my spare time, I've
-started doing some additional problems on [Kaggle][kaggle] to get more exposure
-to some different datasets and modeling techniques.
-
-I figured that by blogging about it, it would force me to keep my code sane and
-legible. So to kick things off, here's my solution to the [Titanic
-competition][titanic]. The goal here was to predict who survived or not based on
-attributes such as gender, age, boarding class, port of embarkation, and a few
-others.
-
-My model is pretty simple, and I certainly could have done a bunch more in terms
-of feature engineering, but even still it clocked in with an accuracy of 80.4%
-(top 15% at the time of this post). My decently commented code is below, and I
-have a [repo][repo] on GitHub too if you're in to that sort of thing.
-
-[kaggle]: https://www.kaggle.com/
-[titanic]: http://www.kaggle.com/c/titanic
-[repo]: https://github.com/brendansudol/kaggle-titanic
+title: "titanic"
 
 {% highlight python %}
 %pylab inline
@@ -54,16 +30,12 @@ sns.set_context(rc={"figure.figsize": (6, 3)})
 
 
 {% highlight python %}
-# load in datasets
+# load in train and test data
 
 dfs = {}
 for name in ['train', 'test']:
     df = pd.read_csv('../data/%s.csv' % name)
-
-    # add a column denoting source (train/test)
     df['data'] = name
-    
-    # add df to dfs dict
     dfs[name] = df
 {% endhighlight %}
 
@@ -453,24 +425,24 @@ for col in ['pclass', 'gender', 'age_bin', 'fare_bin']:
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_0.png)
+![png](titanic_files/titanic_8_0.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_1.png)
+![png](titanic_files/titanic_8_1.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_2.png)
+![png](titanic_files/titanic_8_2.png)
 
 
 
-![png](/ipy-notebooks/markdown/titanic_files/titanic_8_3.png)
+![png](titanic_files/titanic_8_3.png)
 
 
 
 {% highlight python %}
-# store the columns (features) to be used for classifying survival
+# store the columns (features) to be used in classification
 x_cols = df.columns.values[3:]
 
 print '%d total features' % len(x_cols)
@@ -614,3 +586,4 @@ print 'boom.'
 {% endhighlight %}
 
     boom.
+

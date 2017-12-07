@@ -1,47 +1,16 @@
----
-layout:     post
-title:      Predicting DC's bikeshare demand
-date:       2015-05-13
----
-
-Recently, I've been doing some Kaggle competitions in my spare time and then
-sharing my approach / solution on here. [Last week][titanic_post], I did a
-binary classification task around predicting Titanic survivors. In this second
-installment, let's dive into a regression problem, [Bike Sharing
-Demand][kaggle_bike].
-
-The problem involves Washington D.C.'s [bike sharing program][capital_bike]. The
-goal is to forecast hourly demand based on historical usage patterns and weather
-data. We're given a dataset that's complete for the first 19 days of every month
-(over a 2 year period), and we need to predict how many bikes are rented by hour
-for the remaining days of each month.
-
-There are several interesting pieces to this problem that can collectively help
-you arrive at a good model and result (top 5% of entries as of this post):
-
-* There's a timestamp column in the dataset that can be parsed to create several
-  different time related variables (hour, day of the week, month, year, etc.)
-  that are useful in modeling the intraday & seasonal trends.
-* In the training data, rentals are broken out into two groups of users
-  (registered and casual), and these groups exhibit different usage patterns
-  (e.g., see day of week chart below). Because of this, it seems to be
-  beneficial to regress demand for these users separately and then combine the
-  results together.
-* Try applying some data transformations of your dependent variables to better
-  account for their skewed distributions (e.g., note the mass of values bunched
-  at the low end of the 'casual' histogram).
-* After landing on a suitable feature set, take some time to optimize your model
-  parameters; even simple (non-comprehensive) tuning can dramatically improve
-  your score in this challenge.
-
-Enough with the chit chat, here's the code (github repo [here][github_repo]):
-
-[titanic_post]: http://www.brendansudol.com/posts/kaggle-titanic/
-[kaggle_bike]: https://www.kaggle.com/c/bike-sharing-demand
-[capital_bike]: http://www.capitalbikeshare.com/system-data
-[github_repo]: https://github.com/brendansudol/kaggle-bike-share
+title: "bikeshare"
 
 {% highlight python %}
+%pylab inline
+{% endhighlight %}
+
+    Populating the interactive namespace from numpy and matplotlib
+
+
+
+{% highlight python %}
+import itertools
+from time import time
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -268,7 +237,7 @@ by_day.hist(figsize=(10, 3));
 
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_5_1.png)
+![png](bikeshare_files/bikeshare_5_1.png)
 
 
 
@@ -278,7 +247,7 @@ dg.groupby(['year', 'month'])['count'].agg(sum).plot(kind='bar');
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_6_0.png)
+![png](bikeshare_files/bikeshare_6_0.png)
 
 
 
@@ -290,7 +259,7 @@ by_dow.plot(kind='bar', width=0.8);
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_7_0.png)
+![png](bikeshare_files/bikeshare_7_0.png)
 
 
 
@@ -302,7 +271,7 @@ by_hour.plot(kind='bar', figsize=(8,4), width=0.8);
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_8_0.png)
+![png](bikeshare_files/bikeshare_8_0.png)
 
 
 
@@ -314,7 +283,7 @@ dg.groupby('temp_int')['count'].agg('median').plot();
 {% endhighlight %}
 
 
-![png](/ipy-notebooks/markdown/bikeshare_files/bikeshare_9_0.png)
+![png](bikeshare_files/bikeshare_9_0.png)
 
 
 
@@ -977,3 +946,4 @@ print 'boom.'
 {% endhighlight %}
 
     boom.
+

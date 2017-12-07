@@ -1,44 +1,12 @@
----
-layout:     post
-title:      The magic words to get free pizza
-date:       2015-05-28
----
+title: "pizza"
 
-Another week, another Kaggle competition write-up. I'm officially dubbing this
-month _Machine Learning May_. But rest assured, this will be the last one of
-these write-ups for a little while — I don't want to get type-casted :)
+{% highlight python %}
+%pylab inline
+{% endhighlight %}
 
-For this competition, we're tasked with predicting altruism. We're given a
-dataset of textual requests for pizza from the Reddit community [Random Acts of
-Pizza][reddit]. All requests ask for one thing: a free pizza. Our goal is to
-create a model that can predict the success of these requests.
+    Populating the interactive namespace from numpy and matplotlib
 
-This is a nice intro challenge for people wanting to cut their teeth on some
-basic natural language processing (NLP). There's also an accompanying academic
-paper by a group of Stanford PhD students [here][paper], which is a fun read and
-helpful in seeing how they approached the problem.
 
-This time around, submissions are evaluated based on the area under the ROC
-curve. For more info on ROC analysis, [this paper][roc_paper] is a great primer,
-but basically it's a way to visualize the performance of a classifier (true
-positives vs. false negatives) along various discrimination thresholds (the
-cutoff probability for the binary classification).
-
-Alright, time for the models. I ended up doing two. The first is a very simple
-Naive Bayes [Bag of Words][bag_words] model using the text from the request
-(after combining the title and body fields). The code for it is below and after
-some parameter tuning, it scores a 0.605. The second model uses a Gradient
-Boosting Classifier and incorporates more features (several of which come from
-the academic paper above); this one scores a 0.702 (code [here][model_2_code]).
-
-Curious which individual words best predict whether a request will result in a
-pizza? See below!
-
-[reddit]: http://www.reddit.com/r/Random_Acts_Of_Pizza/
-[paper]: http://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf
-[roc_paper]: https://ccrma.stanford.edu/workshops/mir2009/references/ROCintro.pdf
-[bag_words]: http://en.wikipedia.org/wiki/Bag-of-words_model
-[model_2_code]: http://nbviewer.ipython.org/github/brendansudol/kaggle-pizza/blob/master/ipy-notebooks/model-2-gradient-boosting.ipynb
 
 {% highlight python %}
 import json, re
@@ -151,7 +119,7 @@ for col in ['txt_raw', 'txt_clean']:
 
 {% highlight python %}
 # prep training set data for modeling
-# creates numerical arrays for X (bag of words) and y (got pizza)
+# (creates numerical arrays for X (bag of words) and y (got pizza)
 
 def get_xy(vectorizer=None, txt_col='txt_clean'):
     if vectorizer is None:

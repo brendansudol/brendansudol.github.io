@@ -24,6 +24,8 @@ keep_files:
 
 exclude:
   - assets/src
+  - ipy-notebooks/notebooks
+  - ipy-notebooks/templates
   - node_modules
   - NOTES
   - Gemfile
