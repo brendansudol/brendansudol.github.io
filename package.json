@@ -1,5 +1,5 @@
 {
-  "name": "bren",
+  "name": "brendansudol.github.io",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "dev": "concurrently -k 'webpack -w' 'bundle exec jekyll serve'",
     "build": "npm run clean && NODE_ENV=production webpack -p && bundle exec jekyll build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d _site"
+    "deploy": "gh-pages -d _site -b master"
   },
   "dependencies": {
     "d3": "^3.5.17",
