@@ -1,0 +1,258 @@
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Predicting Titantic survivorship (Kaggle)</title> <meta name="author" content="Brendan Sudol"> <meta name="keywords" content=""> <meta property="og:locale" content="en_US"> <meta property="og:type" content="article"> <meta property="og:title" content="Predicting Titantic survivorship (Kaggle)"> <meta property="og:description" content="Predicting Titantic survivorship (Kaggle)"> <meta property="og:url" content="https://www.brendansudol.com/writing/kaggle-titanic"> <meta property="og:site_name" content="Brendan Sudol"> <meta name="twitter:card" content="summary"> <meta name="twitter:site" content="@"> <meta name="twitter:title" content="Predicting Titantic survivorship (Kaggle)"> <meta name="twitter:description" content="Predicting Titantic survivorship (Kaggle)"> <meta name="twitter:url" content="https://www.brendansudol.com/writing/kaggle-titanic"> <meta name="twitter:image" content="https://www.brendansudol.com/assets/img/misc/bren-doodle-color.png"> <link rel="stylesheet" href="/assets/css/all.css?201712070004"> </head> <body class='site'> <div class='site-wrap'> <header class='container mx-auto px2 py3 mt1 mb2'> <a href='/' class='h3 bold black'>Brendan Sudol</a> <nav class='mt-tiny h5'> <a class='mr2 black' href='/writing/'>Writing</a> <a class='mr2 black' href='/projects/'>Projects</a> <a class='mr2 black' href='https://github.com/brendansudol'>Github</a> <a class='black' href='https://twitter.com/brensudol'>Twitter</a> </nav> </header> <div class='container mx-auto pl2 pr2'><div class='h6 gray'>May 2015</div> <h1 class='mt0 mb3 h2 sm-h0'>Predicting Titantic survivorship (Kaggle)</h1> <article class='mb3 sm-col-4'><p>At work recently, I had the chance to work on and learn about some interesting machine learning problems (around customer retention) and in my spare time, I’ve started doing some additional problems on <a href="https://www.kaggle.com/">Kaggle</a> to get more exposure to some different datasets and modeling techniques.</p> <p>I figured that by blogging about it, it would force me to keep my code sane and legible. So to kick things off, here’s my solution to the <a href="http://www.kaggle.com/c/titanic">Titanic competition</a>. The goal here was to predict who survived or not based on attributes such as gender, age, boarding class, port of embarkation, and a few others.</p> <p>My model is pretty simple, and I certainly could have done a bunch more in terms of feature engineering, but even still it clocked in with an accuracy of 80.4% (top 15% at the time of this post). My decently commented code is below, and I have a <a href="https://github.com/brendansudol/kaggle-titanic">repo</a> on GitHub too if you’re in to that sort of thing.</p> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">%</span><span class="n">pylab</span> <span class="n">inline</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Populating the interactive namespace from numpy and matplotlib
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">StratifiedKFold</span><span class="p">,</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.grid_search</span> <span class="kn">import</span> <span class="n">GridSearchCV</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">'display.width'</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s">'display.max_columns'</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">"darkgrid"</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s">"figure.figsize"</span><span class="p">:</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># load in datasets</span>
+
+<span class="n">dfs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'train'</span><span class="p">,</span> <span class="s">'test'</span><span class="p">]:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'../data/</span><span class="si">%</span><span class="s">s.csv'</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="c"># add a column denoting source (train/test)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'data'</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    
+    <span class="c"># add df to dfs dict</span>
+    <span class="n">dfs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># basic info about columns in each dataset</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dfs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">'df: </span><span class="si">%</span><span class="s">s</span><span class="se">\n</span><span class="s">'</span> <span class="o">%</span> <span class="n">name</span>
+    <span class="k">print</span> <span class="s">'shape: </span><span class="si">%</span><span class="s">d rows, </span><span class="si">%</span><span class="s">d cols</span><span class="se">\n</span><span class="s">'</span> <span class="o">%</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="k">print</span> <span class="s">'column info:'</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">'* </span><span class="si">%</span><span class="s">s: </span><span class="si">%</span><span class="s">d nulls, </span><span class="si">%</span><span class="s">d unique vals, most common: </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">col</span><span class="p">,</span> 
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="nb">sum</span><span class="p">(),</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">print</span> <span class="s">'</span><span class="se">\n</span><span class="s">------</span><span class="se">\n</span><span class="s">'</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df: test
+
+shape: 418 rows, 12 cols
+
+column info:
+* PassengerId: 0 nulls, 418 unique vals, most common: {1128: 1, 1023: 1}
+* Pclass: 0 nulls, 3 unique vals, most common: {1: 107, 3: 218}
+* Name: 0 nulls, 418 unique vals, most common: {'Rosenbaum, Miss. Edith Louise': 1, 'Beauchamp, Mr. Henry James': 1}
+* Sex: 0 nulls, 2 unique vals, most common: {'male': 266, 'female': 152}
+* Age: 86 nulls, 79 unique vals, most common: {24.0: 17, 21.0: 17}
+* SibSp: 0 nulls, 7 unique vals, most common: {0: 283, 1: 110}
+* Parch: 0 nulls, 8 unique vals, most common: {0: 324, 1: 52}
+* Ticket: 0 nulls, 363 unique vals, most common: {'PC 17608': 5, '113503': 4}
+* Fare: 1 nulls, 169 unique vals, most common: {7.75: 21, 26.0: 19}
+* Cabin: 327 nulls, 76 unique vals, most common: {'B57 B59 B63 B66': 3, 'C101': 2}
+* Embarked: 0 nulls, 3 unique vals, most common: {'S': 270, 'C': 102}
+* data: 0 nulls, 1 unique vals, most common: {'test': 418}
+
+------
+
+df: train
+
+shape: 891 rows, 13 cols
+
+column info:
+* PassengerId: 0 nulls, 891 unique vals, most common: {891: 1, 293: 1}
+* Survived: 0 nulls, 2 unique vals, most common: {0: 549, 1: 342}
+* Pclass: 0 nulls, 3 unique vals, most common: {1: 216, 3: 491}
+* Name: 0 nulls, 891 unique vals, most common: {'Graham, Mr. George Edward': 1, 'Elias, Mr. Tannous': 1}
+* Sex: 0 nulls, 2 unique vals, most common: {'male': 577, 'female': 314}
+* Age: 177 nulls, 88 unique vals, most common: {24.0: 30, 22.0: 27}
+* SibSp: 0 nulls, 7 unique vals, most common: {0: 608, 1: 209}
+* Parch: 0 nulls, 7 unique vals, most common: {0: 678, 1: 118}
+* Ticket: 0 nulls, 681 unique vals, most common: {'CA. 2343': 7, '347082': 7}
+* Fare: 0 nulls, 248 unique vals, most common: {13.0: 42, 8.0500000000000007: 43}
+* Cabin: 687 nulls, 147 unique vals, most common: {'G6': 4, 'C23 C25 C27': 4}
+* Embarked: 2 nulls, 3 unique vals, most common: {'S': 644, 'C': 168}
+* data: 0 nulls, 1 unique vals, most common: {'train': 891}
+
+------
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># combine train and test data into one df</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s">'train'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfs</span><span class="p">[</span><span class="s">'test'</span><span class="p">])</span>
+
+<span class="c"># lowercase column names</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c"># reorder columns</span>
+<span class="n">new_col_order</span> <span class="o">=</span> <span class="p">[</span><span class="s">'data'</span><span class="p">,</span> <span class="s">'passengerid'</span><span class="p">,</span> <span class="s">'survived'</span><span class="p">,</span> <span class="s">'age'</span><span class="p">,</span>
+                <span class="s">'cabin'</span><span class="p">,</span> <span class="s">'embarked'</span><span class="p">,</span> <span class="s">'fare'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">,</span> <span class="s">'parch'</span><span class="p">,</span>
+                <span class="s">'pclass'</span><span class="p">,</span> <span class="s">'sex'</span><span class="p">,</span> <span class="s">'sibsp'</span><span class="p">,</span> <span class="s">'ticket'</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">new_col_order</span><span class="p">]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure> <div class="html-output"> <div style="max-height:1000px;max-width:1500px;overflow:auto;"> <table border="1" class="dataframe"> <thead> <tr style="text-align: right;"> <th></th> <th>data</th> <th>passengerid</th> <th>survived</th> <th>age</th> <th>cabin</th> <th>embarked</th> <th>fare</th> <th>name</th> <th>parch</th> <th>pclass</th> <th>sex</th> <th>sibsp</th> <th>ticket</th> </tr> </thead> <tbody> <tr> <th>0</th> <td> train</td> <td> 1</td> <td> 0</td> <td> 22</td> <td> NaN</td> <td> S</td> <td> 7.2500</td> <td> Braund, Mr. Owen Harris</td> <td> 0</td> <td> 3</td> <td> male</td> <td> 1</td> <td> A/5 21171</td> </tr> <tr> <th>1</th> <td> train</td> <td> 2</td> <td> 1</td> <td> 38</td> <td> C85</td> <td> C</td> <td> 71.2833</td> <td> Cumings, Mrs. John Bradley (Florence Briggs Th...</td> <td> 0</td> <td> 1</td> <td> female</td> <td> 1</td> <td> PC 17599</td> </tr> <tr> <th>2</th> <td> train</td> <td> 3</td> <td> 1</td> <td> 26</td> <td> NaN</td> <td> S</td> <td> 7.9250</td> <td> Heikkinen, Miss. Laina</td> <td> 0</td> <td> 3</td> <td> female</td> <td> 0</td> <td> STON/O2. 3101282</td> </tr> <tr> <th>3</th> <td> train</td> <td> 4</td> <td> 1</td> <td> 35</td> <td> C123</td> <td> S</td> <td> 53.1000</td> <td> Futrelle, Mrs. Jacques Heath (Lily May Peel)</td> <td> 0</td> <td> 1</td> <td> female</td> <td> 1</td> <td> 113803</td> </tr> <tr> <th>4</th> <td> train</td> <td> 5</td> <td> 0</td> <td> 35</td> <td> NaN</td> <td> S</td> <td> 8.0500</td> <td> Allen, Mr. William Henry</td> <td> 0</td> <td> 3</td> <td> male</td> <td> 0</td> <td> 373450</td> </tr> </tbody> </table> </div> </div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># convert sex to ints (male = 1, female = 0)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'gender'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'sex'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s">'male'</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c"># extract title</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'.'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+<span class="c"># fill missing age with mean by title</span>
+<span class="n">age_by_title</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'title'</span><span class="p">)[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">age_by_title</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">'title'</span><span class="p">])</span> 
+                     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s">'age'</span><span class="p">])</span> <span class="k">else</span> <span class="n">row</span><span class="p">[</span><span class="s">'age'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># fill missing fare with median by pclass</span>
+<span class="c"># some people have a fare = 0, so only look at those &gt; 0</span>
+<span class="n">fare_by_pclass</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'pclass'</span><span class="p">)[</span><span class="s">'fare'</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'fare'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s">'fare'</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s">'fare'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> 
+                      <span class="k">else</span> <span class="n">fare_by_pclass</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s">'pclass'</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># fill missing embarked with most common port</span>
+<span class="n">most_common_port</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'embarked'</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'embarked'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'embarked'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">most_common_port</span><span class="p">)</span>
+
+<span class="c"># transform categorical embarked column to 1/0 dummy columns</span>
+<span class="n">dummies</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'embarked'</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="s">'port'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">dummies</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data                             train
+passengerid                          1
+survived                             0
+age                                 22
+cabin                              NaN
+embarked                             S
+fare                              7.25
+name           Braund, Mr. Owen Harris
+parch                                0
+pclass                               3
+sex                               male
+sibsp                                1
+ticket                       A/5 21171
+gender                               1
+title                               Mr
+port_C                               0
+port_Q                               0
+port_S                               1
+Name: 0, dtype: object
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># drop unnecessary columns</span>
+<span class="n">drop_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s">'cabin'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">,</span> <span class="s">'sex'</span><span class="p">,</span> <span class="s">'ticket'</span><span class="p">,</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'embarked'</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">drop_cols</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre></figure> <div class="html-output"> <div style="max-height:1000px;max-width:1500px;overflow:auto;"> <table border="1" class="dataframe"> <thead> <tr style="text-align: right;"> <th></th> <th>data</th> <th>passengerid</th> <th>survived</th> <th>age</th> <th>fare</th> <th>parch</th> <th>pclass</th> <th>sibsp</th> <th>gender</th> <th>port_C</th> <th>port_Q</th> <th>port_S</th> </tr> </thead> <tbody> <tr> <th>0</th> <td> train</td> <td> 1</td> <td> 0</td> <td> 22</td> <td> 7.2500</td> <td> 0</td> <td> 3</td> <td> 1</td> <td> 1</td> <td> 0</td> <td> 0</td> <td> 1</td> </tr> <tr> <th>1</th> <td> train</td> <td> 2</td> <td> 1</td> <td> 38</td> <td> 71.2833</td> <td> 0</td> <td> 1</td> <td> 1</td> <td> 0</td> <td> 1</td> <td> 0</td> <td> 0</td> </tr> <tr> <th>2</th> <td> train</td> <td> 3</td> <td> 1</td> <td> 26</td> <td> 7.9250</td> <td> 0</td> <td> 3</td> <td> 0</td> <td> 0</td> <td> 0</td> <td> 0</td> <td> 1</td> </tr> <tr> <th>3</th> <td> train</td> <td> 4</td> <td> 1</td> <td> 35</td> <td> 53.1000</td> <td> 0</td> <td> 1</td> <td> 1</td> <td> 0</td> <td> 0</td> <td> 0</td> <td> 1</td> </tr> <tr> <th>4</th> <td> train</td> <td> 5</td> <td> 0</td> <td> 35</td> <td> 8.0500</td> <td> 0</td> <td> 3</td> <td> 0</td> <td> 1</td> <td> 0</td> <td> 0</td> <td> 1</td> </tr> </tbody> </table> </div> </div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># survival rates across various columns</span>
+
+<span class="k">def</span> <span class="nf">plot_survive_rate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">chart</span><span class="o">=</span><span class="s">'barh'</span><span class="p">):</span>
+    <span class="n">survive_rates</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span>
+        <span class="s">'survived'</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="n">survive_rates</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">chart</span><span class="p">);</span>
+
+<span class="k">def</span> <span class="nf">bin_num</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="n">base</span><span class="p">))</span>
+    
+<span class="c"># get cleaned training data</span>
+<span class="n">dg</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c"># discretize age &amp; fare</span>
+<span class="n">dg</span><span class="p">[</span><span class="s">'age_bin'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="s">'age'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">bin_num</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">dg</span><span class="p">[</span><span class="s">'fare_bin'</span><span class="p">]</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="s">'fare'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">bin_num</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'pclass'</span><span class="p">,</span> <span class="s">'gender'</span><span class="p">,</span> <span class="s">'age_bin'</span><span class="p">,</span> <span class="s">'fare_bin'</span><span class="p">]:</span>
+    <span class="n">plot_survive_rate</span><span class="p">(</span><span class="n">dg</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span></code></pre></figure> <p><img src="/ipy-notebooks/markdown/titanic_files/titanic_8_0.png" alt="png" /></p> <p><img src="/ipy-notebooks/markdown/titanic_files/titanic_8_1.png" alt="png" /></p> <p><img src="/ipy-notebooks/markdown/titanic_files/titanic_8_2.png" alt="png" /></p> <p><img src="/ipy-notebooks/markdown/titanic_files/titanic_8_3.png" alt="png" /></p> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># store the columns (features) to be used for classifying survival</span>
+<span class="n">x_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+
+<span class="k">print</span> <span class="s">'</span><span class="si">%</span><span class="s">d total features'</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_cols</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">x_cols</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>9 total features
+['age' 'fare' 'parch' 'pclass' 'sibsp' 'gender' 'port_C' 'port_Q' 'port_S']
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># prep training data for classifying</span>
+<span class="c"># (separating features and metric we're predicting)</span>
+
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">x_cols</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s">'survived'</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">'</span><span class="si">%</span><span class="s">d rows, </span><span class="si">%</span><span class="s">d features'</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_cols</span><span class="p">))</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>891 rows, 9 features
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># cross validation to evaluate model</span>
+<span class="c"># (dividing training data into n chunks and training model n times </span>
+<span class="c"># with a different holdout chunk each time)</span>
+
+<span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n_folds</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">tot_correct</span><span class="p">,</span> <span class="n">tot_obs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cv</span><span class="p">):</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train</span><span class="p">]</span>
+    <span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train</span><span class="p">]</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+    <span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">321</span><span class="p">)</span> 
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+    
+    <span class="n">correct</span><span class="p">,</span> <span class="n">obs</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="n">y_pred</span><span class="p">)</span><span class="o">.</span><span class="nb">sum</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">)</span>
+    <span class="n">tot_correct</span> <span class="o">+=</span> <span class="n">correct</span>
+    <span class="n">tot_obs</span> <span class="o">+=</span> <span class="n">obs</span>
+
+<span class="k">print</span> <span class="s">'accuracy: </span><span class="si">%</span><span class="s">f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">tot_correct</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">tot_obs</span><span class="p">)</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>accuracy: 0.799102
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># evaluate model over entire training set </span>
+<span class="c"># and look at each feature's importance</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">321</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">feature_rank</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">x_cols</span><span class="p">)</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">feature_rank</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fare      0.265518
+age       0.264835
+gender    0.259047
+pclass    0.078497
+sibsp     0.054447
+parch     0.046165
+port_S    0.011954
+port_C    0.011904
+port_Q    0.007634
+dtype: float64
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># model parameter tuning</span>
+<span class="c"># (there are several input parameters to a random forest model;</span>
+<span class="c"># grid search automates the process of tweaking these parameters to find the </span>
+<span class="c"># optimal values for these parameters)</span>
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"n_estimators"</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">],</span>
+    <span class="s">"criterion"</span><span class="p">:</span> <span class="p">[</span><span class="s">"gini"</span><span class="p">,</span> <span class="s">"entropy"</span><span class="p">],</span>
+    <span class="s">'max_features'</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s">"sqrt"</span><span class="p">],</span>
+    <span class="s">'max_depth'</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">None</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">321</span><span class="p">)</span>
+<span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_score_</span>
+<span class="k">print</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_params_</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.836139169473
+{'max_features': 0.5, 'n_estimators': 100, 'criterion': 'entropy', 'max_depth': 7}
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># train model with best parameters from grid search</span>
+<span class="c"># and finally predict survival of people from test data</span>
+
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">x_cols</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s">'survived'</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+    <span class="n">criterion</span><span class="o">=</span><span class="s">'entropy'</span><span class="p">,</span> 
+    <span class="n">max_features</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> 
+    <span class="n">max_depth</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">321</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'test'</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">x_cols</span><span class="p">]</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">df_test</span><span class="p">[</span><span class="s">'survived'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+
+<span class="n">final_df</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[[</span><span class="s">'passengerid'</span><span class="p">,</span> <span class="s">'survived'</span><span class="p">]]</span>
+<span class="n">final_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'../output/predicted.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">'boom.'</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>boom.
+</code></pre></div></div> </article> </div> </div> <footer class='p1 center'> <img class='align-middle' src='/assets/img/misc/peace.gif' width='30'> </footer> <script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-37353161-5']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script> </body> </html>

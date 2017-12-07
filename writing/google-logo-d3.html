@@ -1,0 +1,184 @@
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Google logo animation with D3.js</title> <meta name="author" content="Brendan Sudol"> <meta name="keywords" content=""> <meta property="og:locale" content="en_US"> <meta property="og:type" content="article"> <meta property="og:title" content="Google logo animation with D3.js"> <meta property="og:description" content="Google logo animation with D3.js"> <meta property="og:url" content="https://www.brendansudol.com/writing/google-logo-d3"> <meta property="og:site_name" content="Brendan Sudol"> <meta name="twitter:card" content="summary"> <meta name="twitter:site" content="@"> <meta name="twitter:title" content="Google logo animation with D3.js"> <meta name="twitter:description" content="Google logo animation with D3.js"> <meta name="twitter:url" content="https://www.brendansudol.com/writing/google-logo-d3"> <meta name="twitter:image" content="https://www.brendansudol.com/assets/img/misc/bren-doodle-color.png"> <link rel="stylesheet" href="/assets/css/all.css?201712070004"> </head> <body class='site'> <div class='site-wrap'> <header class='container mx-auto px2 py3 mt1 mb2'> <a href='/' class='h3 bold black'>Brendan Sudol</a> <nav class='mt-tiny h5'> <a class='mr2 black' href='/writing/'>Writing</a> <a class='mr2 black' href='/projects/'>Projects</a> <a class='mr2 black' href='https://github.com/brendansudol'>Github</a> <a class='black' href='https://twitter.com/brensudol'>Twitter</a> </nav> </header> <div class='container mx-auto pl2 pr2'><div class='h6 gray'>September 2015</div> <h1 class='mt0 mb3 h2 sm-h0'>Google logo animation with D3.js</h1> <article class='mb3 sm-col-4'><p>Earlier this week, Google <a href="https://design.google.com/articles/evolving-the-google-identity/">unveiled</a> a new logo / identify. I’m a big fan of it; it feels clean, modern, and just plain friendly.</p> <p><img src="/assets/img/writing/google-logo-elements.jpg" alt="Google logo elements" class="bordered" /></p> <p>Along with the logotype, they’ve added some new elements to accomodate different platforms and contexts. And they made an <a href="https://g-design.storage.googleapis.com/production/v5/assets/g-header.mp4">awesome video</a> that animates the new logo between the new states.</p> <p>The video animation is beautiful, and I was inspired to try and recreate it (at least in part) with code (using D3.js). For now, I just focused on the logotype to dots transition; here’s the result:</p> <div id="viz-google-dots"> <div class="input-group"> <label> <input type="radio" name="mode" value="letters" /> Logotype </label> <label> <input type="radio" name="mode" value="dots" /> Dots </label> </div> <div class="svg-holder center"> </div> </div> <p>It’s nowhere near as cool and slick as the animation from the video, but it’s still pretty fun to toggle between the logotype and the dots. Curious about the implementation? Here’s the code that powers it:</p> <div class="long-code-block"> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// svg size / attribute eccentricities </span>
+<span class="c1">// when logotype png was converted to svg</span>
+<span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="mi">1132</span><span class="p">,</span>
+    <span class="nx">h</span> <span class="o">=</span> <span class="mi">372</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"#goog-viz .canvas"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">'svg'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'class'</span><span class="p">,</span> <span class="s1">'logo'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'width'</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'height'</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'viewBox'</span><span class="p">,</span> <span class="s2">"0 0 "</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">h</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"g"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'transform'</span><span class="p">,</span> <span class="s1">''</span> <span class="o">+</span>
+        <span class="s1">'translate('</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="s1">') '</span> <span class="o">+</span>
+        <span class="s1">'scale(1, -1) '</span> <span class="o">+</span>
+        <span class="s1">'translate(-'</span> <span class="o">+</span> <span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="s1">', -'</span> <span class="o">+</span> <span class="nx">h</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="s1">') '</span> <span class="o">+</span>
+        <span class="s1">'translate(0, 1)'</span>
+    <span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">ordinal</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">domain</span><span class="p">(</span><span class="nx">d3</span><span class="p">.</span><span class="nx">range</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="c1">// 4 dots</span>
+    <span class="p">.</span><span class="nx">rangeRoundBands</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">line</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="p">})</span>
+    <span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">timeout</span><span class="p">;</span>
+
+<span class="nx">d3</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="s2">"/assets/data/google.json"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// add circle coordinates based on letter coordinates</span>
+    <span class="c1">// and circle radii (note 2 letters essentially shrink to nothing)</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">circle_radius</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">circle</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">50</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">circle_coords</span> <span class="o">=</span> <span class="nx">compute_circle</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">letter_coords</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">circle_radius</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="c1">// add letters to page</span>
+    <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">'path'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s1">'path'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span> <span class="p">})</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"d"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">path</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">letter_coords</span><span class="p">);</span> <span class="p">});</span>
+
+    <span class="c1">// initial transition trigger</span>
+    <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'input[value="dots"]'</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">property</span><span class="p">(</span><span class="s2">"checked"</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">change</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// handle input changing</span>
+<span class="nx">d3</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">"#goog-viz input"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="nx">change</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">change</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">===</span> <span class="s2">"dots"</span><span class="p">)</span> <span class="nx">morph_to_dots</span><span class="p">();</span>
+    <span class="k">else</span> <span class="nx">morph_to_letters</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// letter to dot transition</span>
+<span class="kd">function</span> <span class="nx">morph_to_dots</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+
+    <span class="nx">t</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">'path'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"d"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">path</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">circle_coords</span><span class="p">);</span> <span class="p">})</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'transform'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="k">this</span><span class="p">),</span>
+                <span class="nx">bb</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">node</span><span class="p">().</span><span class="nx">getBBox</span><span class="p">();</span>
+
+            <span class="kd">var</span> <span class="nx">x_centroid</span> <span class="o">=</span> <span class="nx">bb</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">bb</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="nx">y_centroid</span> <span class="o">=</span> <span class="nx">bb</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">bb</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+            <span class="kd">var</span> <span class="nx">x_new</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">circle</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">?</span> <span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">circle</span><span class="p">)</span> <span class="o">-</span> <span class="nx">x_centroid</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="nx">y_new</span> <span class="o">=</span> <span class="p">(</span><span class="nx">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="nx">y_centroid</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="s2">"translate("</span> <span class="o">+</span> <span class="nx">x_new</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">y_new</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
+        <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// dot to letter transition</span>
+<span class="kd">function</span> <span class="nx">morph_to_letters</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">svg</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+
+    <span class="nx">t</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">'path'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'d'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">path</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">letter_coords</span><span class="p">);</span> <span class="p">})</span>
+        <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'transform'</span><span class="p">,</span> <span class="s1">'translate(0, 0)'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// use coordinates of existing path element to </span>
+<span class="c1">// compute circle coordinates for shape tweening</span>
+<span class="kd">function</span> <span class="nx">compute_circle</span><span class="p">(</span><span class="nx">coordinates</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">circle</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nx">length</span><span class="p">],</span>
+        <span class="nx">polygon</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">polygon</span><span class="p">(</span><span class="nx">coordinates</span><span class="p">),</span>
+        <span class="nx">p0</span> <span class="o">=</span> <span class="nx">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="nx">p1</span><span class="p">,</span>
+        <span class="nx">x</span><span class="p">,</span>
+        <span class="nx">y</span><span class="p">,</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">n</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="nx">coordinates</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+
+    <span class="c1">// Compute the distances of each coordinate.</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">p1</span> <span class="o">=</span> <span class="nx">coordinates</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">x</span> <span class="o">=</span> <span class="nx">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="nx">p0</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">y</span> <span class="o">=</span> <span class="nx">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="nx">p0</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="nx">lengths</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">length</span> <span class="o">+=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span> <span class="o">*</span> <span class="nx">y</span><span class="p">));</span>
+        <span class="nx">p0</span> <span class="o">=</span> <span class="nx">p1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">area</span> <span class="o">=</span> <span class="nx">polygon</span><span class="p">.</span><span class="nx">area</span><span class="p">(),</span>
+        <span class="nx">radius</span> <span class="o">=</span> <span class="nx">r</span> <span class="o">||</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="nx">centroid</span> <span class="o">=</span> <span class="nx">polygon</span><span class="p">.</span><span class="nx">centroid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="nx">area</span><span class="p">)),</span>
+        <span class="nx">angleOffset</span> <span class="o">=</span> <span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nx">angle</span><span class="p">,</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">k</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="nx">lengths</span><span class="p">[</span><span class="nx">lengths</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+
+    <span class="c1">// Compute points along the circle’s </span>
+    <span class="c1">// circumference at equivalent distances.</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">++</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">angle</span> <span class="o">=</span> <span class="nx">angleOffset</span> <span class="o">+</span> <span class="nx">lengths</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">*</span> <span class="nx">k</span><span class="p">;</span>
+        <span class="nx">circle</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span>
+            <span class="nx">centroid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">),</span>
+            <span class="nx">centroid</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span>
+        <span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">circle</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// custom path interpolator that transitions </span>
+<span class="c1">// nicely when path data is of different sizes</span>
+<span class="c1">// thanks to: http://stackoverflow.com/a/14330503</span>
+<span class="nx">d3</span><span class="p">.</span><span class="nx">interpolators</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">isPath</span><span class="p">,</span> <span class="nx">isArea</span><span class="p">,</span> <span class="nx">interpolator</span><span class="p">,</span> <span class="nx">ac</span><span class="p">,</span> <span class="nx">bc</span><span class="p">,</span> <span class="nx">an</span><span class="p">,</span> <span class="nx">bn</span><span class="p">,</span> <span class="nx">d</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">range</span><span class="p">(</span><span class="nx">length</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">extractCoordinates</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">path</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="p">(</span><span class="nx">isArea</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">split</span><span class="p">(</span><span class="s1">'L'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">makePath</span><span class="p">(</span><span class="nx">coordinates</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'M'</span> <span class="o">+</span> <span class="nx">coordinates</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">'L'</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nx">isArea</span> <span class="p">?</span> <span class="s1">'Z'</span> <span class="p">:</span> <span class="s1">''</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">bufferPath</span><span class="p">(</span><span class="nx">p1</span><span class="p">,</span> <span class="nx">p2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">p2</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="nx">p1</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">isArea</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">d</span> <span class="o">/</span> <span class="mi">2</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">p1</span><span class="p">,</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">p1</span><span class="p">[</span><span class="nx">p1</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="nx">d</span> <span class="o">/</span> <span class="mi">2</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">fill</span><span class="p">(</span><span class="nx">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">d</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">p1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">isPath</span> <span class="o">=</span> <span class="sr">/M-</span><span class="se">?\d</span><span class="sr">*</span><span class="se">\.?\d</span><span class="sr">*,-</span><span class="se">?\d</span><span class="sr">*</span><span class="se">\.?\d</span><span class="sr">*</span><span class="se">(</span><span class="sr">L-</span><span class="se">?\d</span><span class="sr">*</span><span class="se">\.?\d</span><span class="sr">*,-</span><span class="se">?\d</span><span class="sr">*</span><span class="se">\.?\d</span><span class="sr">*</span><span class="se">)</span><span class="sr">*Z</span><span class="se">?</span><span class="sr">/</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isPath</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">isPath</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">isArea</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'Z'</span><span class="p">;</span>
+        <span class="nx">ac</span> <span class="o">=</span> <span class="nx">extractCoordinates</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+        <span class="nx">bc</span> <span class="o">=</span> <span class="nx">extractCoordinates</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+        <span class="nx">an</span> <span class="o">=</span> <span class="nx">ac</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="nx">bn</span> <span class="o">=</span> <span class="nx">bc</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">an</span> <span class="o">&gt;</span> <span class="nx">bn</span><span class="p">)</span> <span class="nx">bc</span> <span class="o">=</span> <span class="nx">bufferPath</span><span class="p">(</span><span class="nx">bc</span><span class="p">,</span> <span class="nx">ac</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">bn</span> <span class="o">&gt;</span> <span class="nx">an</span><span class="p">)</span> <span class="nx">ac</span> <span class="o">=</span> <span class="nx">bufferPath</span><span class="p">(</span><span class="nx">ac</span><span class="p">,</span> <span class="nx">bc</span><span class="p">);</span>
+
+        <span class="nx">interpolator</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">interpolateString</span><span class="p">(</span>
+            <span class="nx">bn</span> <span class="o">&gt;</span> <span class="nx">an</span> <span class="p">?</span> <span class="nx">makePath</span><span class="p">(</span><span class="nx">ac</span><span class="p">)</span> <span class="p">:</span> <span class="nx">a</span><span class="p">,</span>
+            <span class="nx">an</span> <span class="o">&gt;</span> <span class="nx">bn</span> <span class="p">?</span> <span class="nx">makePath</span><span class="p">(</span><span class="nx">bc</span><span class="p">)</span> <span class="p">:</span> <span class="nx">b</span>
+        <span class="p">);</span>
+
+        <span class="k">return</span> <span class="nx">bn</span> <span class="o">&gt;</span> <span class="nx">an</span> <span class="p">?</span> <span class="nx">interpolator</span> <span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">t</span> <span class="o">===</span> <span class="mi">1</span> <span class="p">?</span> <span class="nx">b</span> <span class="p">:</span> <span class="nx">interpolator</span><span class="p">(</span><span class="nx">t</span><span class="p">);</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+<span class="p">});</span></code></pre></figure> </div> </article> <script src='/assets/build/d3.js'></script> <script src='/assets/build/googleDots.js'></script> </div> </div> <footer class='p1 center'> <img class='align-middle' src='/assets/img/misc/peace.gif' width='30'> </footer> <script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-37353161-5']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script> </body> </html>

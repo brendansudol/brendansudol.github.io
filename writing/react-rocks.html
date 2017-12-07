@@ -1,0 +1,240 @@
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Getting started with React.js</title> <meta name="author" content="Brendan Sudol"> <meta name="keywords" content=""> <meta property="og:locale" content="en_US"> <meta property="og:type" content="article"> <meta property="og:title" content="Getting started with React.js"> <meta property="og:description" content="Getting started with React.js"> <meta property="og:url" content="https://www.brendansudol.com/writing/react-rocks"> <meta property="og:site_name" content="Brendan Sudol"> <meta name="twitter:card" content="summary"> <meta name="twitter:site" content="@"> <meta name="twitter:title" content="Getting started with React.js"> <meta name="twitter:description" content="Getting started with React.js"> <meta name="twitter:url" content="https://www.brendansudol.com/writing/react-rocks"> <meta name="twitter:image" content="https://www.brendansudol.com/assets/img/misc/bren-doodle-color.png"> <link rel="stylesheet" href="/assets/css/all.css?201712070004"> </head> <body class='site'> <div class='site-wrap'> <header class='container mx-auto px2 py3 mt1 mb2'> <a href='/' class='h3 bold black'>Brendan Sudol</a> <nav class='mt-tiny h5'> <a class='mr2 black' href='/writing/'>Writing</a> <a class='mr2 black' href='/projects/'>Projects</a> <a class='mr2 black' href='https://github.com/brendansudol'>Github</a> <a class='black' href='https://twitter.com/brensudol'>Twitter</a> </nav> </header> <div class='container mx-auto pl2 pr2'><div class='h6 gray'>September 2015</div> <h1 class='mt0 mb3 h2 sm-h0'>Getting started with React.js</h1> <article class='mb3 sm-col-4'><p>I’ve finally started to learn and play around with <a href="http://facebook.github.io/react/">React</a>, a Javascript library for building user interfaces developed by Facebook. And boy, it’s fun. After about 15 minutes of feeling icky about mixing JS and HTML, I started to love it — bringing together the functionality and markup when they’re so intertwined makes things so much easier to iterate on, debug, and understand.</p> <p>I definitely still have TONS to learn, but I wanted to share some of the resources I found helpful, and the first thing I built with React.</p> <p>I went through a lot of tutorials. Here were my favorites:</p> <ul> <li><a href="http://blog.andrewray.me/reactjs-for-stupid-people/">React For stupid people</a></li> <li><a href="http://tutorialzine.com/2014/07/5-practical-examples-for-learning-facebooks-react-framework/">5 practical examples for learning React</a></li> <li><a href="http://jlongster.com/Removing-User-Interface-Complexity,-or-Why-React-is-Awesome">Removing user interface complexity, or why React is awesome</a></li> <li><a href="http://facebook.github.io/react/docs/tutorial.html">Facebook’s official tutorial</a></li> <li><a href="http://blog.tryolabs.com/2015/04/07/react-examples-mailbox/">React examples: mailbox</a></li> <li><a href="http://reactfordesigners.com/labs/reactjs-introduction-for-people-who-know-just-enough-jquery-to-get-by/">React for people who know jQuery</a></li> </ul> <p>I made it a point to write out all the code from the tutorials (no copying and pasting!), which forced me to not skim over anything and reinforced the patterns I started to see. Here’s the <a href="https://github.com/brendansudol/react-sandbox">repo</a> where I kept everything.</p> <p>Then, I took off the tutorial training wheels and built something small on my own. Let’s go through it. It’s a simple interface where users can type or paste in numbers and see summary statistics and a histogram of the data. And as the data changes, things should hopefully update accordingly.</p> <p><img src="/assets/img/writing/react-d3-histogram.jpg" alt="Google logo elements" class="py2" /></p> <p>It’s composed of 3 components: the input text box, the stats, and the histogram.</p> <p>Below is the Main component, which contains the input box (and its initial value), handles when the user adds/updates text, and parses the text into numbers (which get passed to the Stats and Histogram components).</p> <div class="code-jsx"> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">Main</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+    <span class="na">getInitialState</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">starter_nums</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span>
+            <span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span>
+        <span class="p">];</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">text</span><span class="p">:</span> <span class="nx">starter_nums</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">','</span><span class="p">),</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+
+    <span class="na">handleChange</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> 
+            <span class="na">text</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> 
+        <span class="p">});</span>
+    <span class="p">},</span>
+
+    <span class="na">getNumbers</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">','</span><span class="p">),</span>
+        <span class="nx">data</span> <span class="o">=</span> <span class="p">[];</span>
+
+        <span class="nx">numbers</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">num</span><span class="p">))</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>
+        <span class="p">});</span>
+
+        <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="na">render</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getNumbers</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">p</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"lead"</span><span class="o">&gt;</span>
+                <span class="nx">Add</span> <span class="nx">comma</span> <span class="nx">delimited</span> <span class="nx">numbers</span> <span class="nx">to</span> <span class="nx">see</span> <span class="nx">summary</span> 
+                <span class="nx">stats</span> <span class="nx">and</span> <span class="nx">a</span> <span class="nx">histogram</span><span class="p">.</span>
+            <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">textarea</span> 
+                <span class="nx">className</span><span class="o">=</span><span class="s2">"form-control"</span> 
+                <span class="nx">onChange</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">handleChange</span><span class="p">}</span> 
+                <span class="nx">defaultValue</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">text</span><span class="p">}</span>
+                <span class="nx">placeholder</span><span class="o">=</span><span class="s2">"Add comma delimited numbers"</span><span class="o">&gt;&lt;</span><span class="sr">/textarea</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">br</span><span class="o">/&gt;</span>
+            <span class="o">&lt;</span><span class="nx">Stats</span> <span class="nx">data</span><span class="o">=</span><span class="p">{</span><span class="nx">data</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">Histogram</span> <span class="nx">data</span><span class="o">=</span><span class="p">{</span><span class="nx">data</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="nx">hr</span><span class="o">/&gt;</span>
+            <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">"https://github.com/brendansudol/react-d3-histogram"</span><span class="o">&gt;</span>
+                    <span class="nx">github</span> <span class="nx">repo</span> <span class="err">→</span>
+                <span class="o">&lt;</span><span class="sr">/a</span><span class="err">&gt;
+</span>            <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>          <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span></code></pre></figure> </div> <p>The Stats component is very simple. It takes in the parsed numbers from the input box, uses the Simple Statistics library to compute some descriptive stats (mean, median, etc.), and renders them as stat cards in a grid layout.</p> <div class="code-jsx"> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">ss</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'simple-statistics'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Stats</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+    <span class="na">format</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">x</span><span class="p">)))</span> <span class="k">return</span> <span class="s1">'—'</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">%</span> <span class="mi">1</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">x</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">x</span><span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+
+    <span class="na">get_stats</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">count</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+            <span class="na">mean</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">mean</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">median</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">median</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">mode</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">mode</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">min</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">max</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">sum</span><span class="p">:</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+
+    <span class="na">render</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">stats</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_stats</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">display_stats</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">'count'</span><span class="p">,</span> <span class="s1">'min'</span><span class="p">,</span> <span class="s1">'max'</span><span class="p">,</span>
+            <span class="s1">'mean'</span><span class="p">,</span> <span class="s1">'median'</span><span class="p">,</span> <span class="s1">'sum'</span>
+        <span class="p">];</span>
+        <span class="kd">var</span> <span class="nb">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"row"</span><span class="o">&gt;</span>
+            <span class="p">{</span>
+                <span class="nx">display_stats</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="p">(</span>
+                        <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">name</span><span class="p">}</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"col-xs-6 col-sm-4"</span><span class="o">&gt;</span>
+                            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"stat-box"</span><span class="o">&gt;</span>
+                                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"stat-num"</span><span class="o">&gt;</span>
+                                    <span class="p">{</span><span class="nb">self</span><span class="p">.</span><span class="nx">format</span><span class="p">(</span><span class="nx">stats</span><span class="p">[</span><span class="nx">name</span><span class="p">])}</span>
+                                <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                                <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"stat-name"</span><span class="o">&gt;</span>
+                                    <span class="p">{</span><span class="nx">name</span><span class="p">}</span>
+                                <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                            <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                        <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>                    <span class="p">);</span>
+                <span class="p">})</span>
+            <span class="p">}</span>
+          <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="p">);</span>
+    <span class="p">},</span>
+<span class="p">});</span></code></pre></figure> </div> <p>And finally, we have the Histogram component. Here’s where I mix in some D3.js. Both React and D3 are opinionated about how things should be rendered and updated. For this, I’m deferring most of that logic to D3 and hooking into React’s lifecycle methods of <code class="highlighter-rouge">componentDidMount</code> and <code class="highlighter-rouge">componentDidUpdate</code> to trigger when D3 should create the visualization and update it as the input data changes.</p> <div class="code-jsx"> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">d3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'d3'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Histogram</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+    <span class="na">getDefaultProps</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span>
+            <span class="na">width</span><span class="p">:</span> <span class="mi">570</span><span class="p">,</span>
+            <span class="na">height</span><span class="p">:</span> <span class="mi">210</span><span class="p">,</span>
+            <span class="na">margin</span><span class="p">:</span> <span class="p">{</span><span class="na">top</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="na">right</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="na">bottom</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="na">left</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+            <span class="na">buckets</span><span class="p">:</span> <span class="mi">10</span>
+        <span class="p">};</span>
+    <span class="p">},</span>
+
+    <span class="na">componentDidMount</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">createChart</span><span class="p">();</span>
+    <span class="p">},</span>
+
+    <span class="na">componentDidUpdate</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">updateChart</span><span class="p">();</span>
+    <span class="p">},</span>
+
+    <span class="na">render</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="p">(</span>
+          <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"viz"</span> <span class="nx">className</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="s1">''</span> <span class="p">:</span> <span class="s1">'hidden'</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">svg</span> <span class="nx">ref</span><span class="o">=</span><span class="s2">"svg"</span><span class="o">/&gt;</span>
+          <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>        <span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="na">createChart</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> 
+            <span class="nx">h</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span>
+            <span class="nx">m</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">margin</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">chart_width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">m</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="nx">m</span><span class="p">.</span><span class="nx">right</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">chart_height</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">-</span> <span class="nx">m</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">m</span><span class="p">.</span><span class="nx">bottom</span><span class="p">;</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">_setXscale</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_binData</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_setYscale</span><span class="p">();</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">xAxis</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">svg</span><span class="p">.</span><span class="nx">axis</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">ticks</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">buckets</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">orient</span><span class="p">(</span><span class="s2">"bottom"</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">svg</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="s2">"histogram"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">w</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"g"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"transform"</span><span class="p">,</span> <span class="s2">"translate("</span> <span class="o">+</span> <span class="nx">m</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="s2">","</span> <span class="o">+</span> <span class="nx">m</span><span class="p">.</span><span class="nx">top</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">);</span>
+
+        <span class="nx">svg</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">"g"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="s2">"x axis"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"transform"</span><span class="p">,</span> <span class="s2">"translate(0,"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">chart_height</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">xAxis</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nb">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">svg</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s2">".bar"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="nx">data_binned</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'x'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'y'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="nx">data_binned</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">dx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> 
+                <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">chart_height</span> <span class="o">-</span> <span class="nb">self</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> 
+            <span class="p">});</span>
+    <span class="p">},</span>
+
+    <span class="na">updateChart</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_setXscale</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_binData</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_setYscale</span><span class="p">();</span>
+
+        <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'.x.axis'</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">xAxis</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">));</span>
+
+        <span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">React</span><span class="p">.</span><span class="nx">findDOMNode</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">refs</span><span class="p">.</span><span class="nx">svg</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">'g'</span><span class="p">);</span>
+
+        <span class="kd">var</span> <span class="nx">bars</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">selectAll</span><span class="p">(</span><span class="s1">'.bar'</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">data_binned</span><span class="p">);</span>
+
+        <span class="nx">bars</span><span class="p">.</span><span class="nx">exit</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s1">'fill-opacity'</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+
+        <span class="nx">bars</span><span class="p">.</span><span class="nx">enter</span><span class="p">().</span><span class="nx">append</span><span class="p">(</span><span class="s2">"rect"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="s2">"bar"</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chart_height</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+
+        <span class="kd">var</span> <span class="nb">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+        <span class="nx">bars</span><span class="p">.</span><span class="nx">transition</span><span class="p">().</span><span class="nx">duration</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span> <span class="p">})</span> 
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"y"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="p">})</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="nx">x</span><span class="p">(</span><span class="nb">self</span><span class="p">.</span><span class="nx">data_binned</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">dx</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> 
+              <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="nx">chart_height</span> <span class="o">-</span> <span class="nb">self</span><span class="p">.</span><span class="nx">y</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> 
+            <span class="p">});</span>
+    <span class="p">},</span>
+
+    <span class="na">_binData</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data_binned</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">layout</span><span class="p">.</span><span class="nx">histogram</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">bins</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">ticks</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">buckets</span><span class="p">))</span>
+            <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="na">_setXscale</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">data</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">chart_width</span><span class="p">]);</span>
+    <span class="p">},</span>
+
+    <span class="na">_setYscale</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">scale</span><span class="p">.</span><span class="nx">linear</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">domain</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">data_binned</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">y</span><span class="p">;</span> <span class="p">})])</span>
+            <span class="p">.</span><span class="nx">range</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">chart_height</span><span class="p">,</span> <span class="mi">0</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">});</span></code></pre></figure> </div> <p>And that’s it. Here’s the <a href="http://www.brendansudol.com/react-d3-histogram/example/">demo</a> of everything together. And here’s the <a href="https://github.com/brendansudol/react-d3-histogram">repo</a> with the components and example page. I used Webpack to package up the JS into one bundle for the example page. Webpack is awesome BTW, but I’ll save that for another post :) Until then, I can’t wait to learn and dig in more with React!</p> </article> </div> </div> <footer class='p1 center'> <img class='align-middle' src='/assets/img/misc/peace.gif' width='30'> </footer> <script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-37353161-5']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script> </body> </html>

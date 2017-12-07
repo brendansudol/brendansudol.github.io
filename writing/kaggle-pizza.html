@@ -1,0 +1,227 @@
+<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>The magic words to get free pizza (Kaggle)</title> <meta name="author" content="Brendan Sudol"> <meta name="keywords" content=""> <meta property="og:locale" content="en_US"> <meta property="og:type" content="article"> <meta property="og:title" content="The magic words to get free pizza (Kaggle)"> <meta property="og:description" content="The magic words to get free pizza (Kaggle)"> <meta property="og:url" content="https://www.brendansudol.com/writing/kaggle-pizza"> <meta property="og:site_name" content="Brendan Sudol"> <meta name="twitter:card" content="summary"> <meta name="twitter:site" content="@"> <meta name="twitter:title" content="The magic words to get free pizza (Kaggle)"> <meta name="twitter:description" content="The magic words to get free pizza (Kaggle)"> <meta name="twitter:url" content="https://www.brendansudol.com/writing/kaggle-pizza"> <meta name="twitter:image" content="https://www.brendansudol.com/assets/img/misc/bren-doodle-color.png"> <link rel="stylesheet" href="/assets/css/all.css?201712070004"> </head> <body class='site'> <div class='site-wrap'> <header class='container mx-auto px2 py3 mt1 mb2'> <a href='/' class='h3 bold black'>Brendan Sudol</a> <nav class='mt-tiny h5'> <a class='mr2 black' href='/writing/'>Writing</a> <a class='mr2 black' href='/projects/'>Projects</a> <a class='mr2 black' href='https://github.com/brendansudol'>Github</a> <a class='black' href='https://twitter.com/brensudol'>Twitter</a> </nav> </header> <div class='container mx-auto pl2 pr2'><div class='h6 gray'>May 2015</div> <h1 class='mt0 mb3 h2 sm-h0'>The magic words to get free pizza (Kaggle)</h1> <article class='mb3 sm-col-4'><p>Another week, another Kaggle competition write-up. I’m officially dubbing this month <em>Machine Learning May</em>. But rest assured, this will be the last one of these write-ups for a little while — I don’t want to get type-casted :)</p> <p>For this competition, we’re tasked with predicting altruism. We’re given a dataset of textual requests for pizza from the Reddit community <a href="http://www.reddit.com/r/Random_Acts_Of_Pizza/">Random Acts of Pizza</a>. All requests ask for one thing: a free pizza. Our goal is to create a model that can predict the success of these requests.</p> <p>This is a nice intro challenge for people wanting to cut their teeth on some basic natural language processing (NLP). There’s also an accompanying academic paper by a group of Stanford PhD students <a href="http://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf">here</a>, which is a fun read and helpful in seeing how they approached the problem.</p> <p>This time around, submissions are evaluated based on the area under the ROC curve. For more info on ROC analysis, <a href="https://ccrma.stanford.edu/workshops/mir2009/references/ROCintro.pdf">this paper</a> is a great primer, but basically it’s a way to visualize the performance of a classifier (true positives vs. false negatives) along various discrimination thresholds (the cutoff probability for the binary classification).</p> <p>Alright, time for the models. I ended up doing two. The first is a very simple Naive Bayes <a href="http://en.wikipedia.org/wiki/Bag-of-words_model">Bag of Words</a> model using the text from the request (after combining the title and body fields). The code for it is below and after some parameter tuning, it scores a 0.605. The second model uses a Gradient Boosting Classifier and incorporates more features (several of which come from the academic paper above); this one scores a 0.702 (code <a href="http://nbviewer.ipython.org/github/brendansudol/kaggle-pizza/blob/master/ipy-notebooks/model-2-gradient-boosting.ipynb">here</a>).</p> <p>Curious which individual words best predict whether a request will result in a pizza? See below!</p> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">json</span><span class="p">,</span> <span class="n">re</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="kn">import</span> <span class="n">MultinomialNB</span>
+<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">dfs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'train'</span><span class="p">,</span> <span class="s">'test'</span><span class="p">]:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s">'../data/</span><span class="si">%</span><span class="s">s.json'</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s">'_data'</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">dfs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+
+<span class="c"># combine train and test data into one df</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="s">'train'</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dfs</span><span class="p">[</span><span class="s">'test'</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># limit to shared columns (plus predictor)</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dfs</span><span class="p">[</span><span class="s">'test'</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s">'requester_received_pizza'</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span>
+
+<span class="c"># rename a few columns to be pithier</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">'request_title'</span><span class="p">:</span> <span class="s">'title'</span><span class="p">,</span> 
+        <span class="s">'request_text_edit_aware'</span><span class="p">:</span> <span class="s">'body'</span><span class="p">,</span>
+        <span class="s">'requester_received_pizza'</span><span class="p">:</span> <span class="s">'got_pizza'</span><span class="p">,</span>
+<span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># convert got pizza indicator to ints</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'got_pizza'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'got_pizza'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c"># toss out unused columns</span>
+<span class="n">cols_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s">'_data'</span><span class="p">,</span> <span class="s">'request_id'</span><span class="p">,</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'body'</span><span class="p">,</span> <span class="s">'got_pizza'</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols_to_keep</span><span class="p">]</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_data                                                     train
+request_id                                             t3_l25d7
+title                   Request Colorado Springs Help Us Please
+body          Hi I am in need of food for my 4 children we a...
+got_pizza                                                     0
+Name: 0, dtype: object
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># combine title and body columns</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'txt_raw'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'title'</span><span class="p">]</span> <span class="o">+</span> <span class="s">' '</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s">'body'</span><span class="p">]</span>
+
+<span class="c"># check that it worked</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'title'</span><span class="p">,</span> <span class="s">'body'</span><span class="p">,</span> <span class="s">'txt_raw'</span><span class="p">]:</span>
+    <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">'--'</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Request Colorado Springs Help Us Please
+--
+Hi I am in need of food for my 4 children we are a military family that has really hit hard times and we have exahusted all means of help just to be able to feed my family and make it through another night is all i ask i know our blessing is coming so whatever u can find in your heart to give is greatly appreciated
+--
+Request Colorado Springs Help Us Please Hi I am in need of food for my 4 children we are a military family that has really hit hard times and we have exahusted all means of help just to be able to feed my family and make it through another night is all i ask i know our blessing is coming so whatever u can find in your heart to give is greatly appreciated
+--
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># clean up text (lowercase, letters only, remove stop words)</span>
+
+<span class="k">def</span> <span class="nf">clean_txt</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">remove_stop</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="c"># remove non-letters</span>
+    <span class="n">letters_only</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">"[^a-zA-Z]"</span><span class="p">,</span> <span class="s">" "</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span> 
+
+    <span class="c"># convert to lower case, split into individual words</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">letters_only</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>                             
+
+    <span class="c"># remove stop words</span>
+    <span class="n">stops</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s">"english"</span><span class="p">))</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">stops</span><span class="p">]</span>
+    
+    <span class="c"># join cleaned words</span>
+    <span class="k">return</span> <span class="s">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s">'txt_clean'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'txt_raw'</span><span class="p">]</span><span class="o">.</span><span class="nb">apply</span><span class="p">(</span><span class="n">clean_txt</span><span class="p">)</span>
+
+<span class="c"># check that it worked</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s">'txt_raw'</span><span class="p">,</span> <span class="s">'txt_clean'</span><span class="p">]:</span>
+    <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">'--'</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Request Colorado Springs Help Us Please Hi I am in need of food for my 4 children we are a military family that has really hit hard times and we have exahusted all means of help just to be able to feed my family and make it through another night is all i ask i know our blessing is coming so whatever u can find in your heart to give is greatly appreciated
+--
+request colorado springs help us please hi need food children military family really hit hard times exahusted means help able feed family make another night ask know blessing coming whatever u find heart give greatly appreciated
+--
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># prep training set data for modeling</span>
+<span class="c"># creates numerical arrays for X (bag of words) and y (got pizza)</span>
+
+<span class="k">def</span> <span class="nf">get_xy</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">txt_col</span><span class="o">=</span><span class="s">'txt_clean'</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">vectorizer</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">()</span>
+        
+    <span class="n">dg</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'_data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">]</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">dg</span><span class="p">[</span><span class="n">txt_col</span><span class="p">])</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">dg</span><span class="p">[</span><span class="s">'got_pizza'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># randomly split training set and try default NB model</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">get_xy</span><span class="p">()</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">"Accuracy on training data: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">"Accuracy on test data:     </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">"AUC: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Accuracy on training data: 0.885149
+Accuracy on test data:     0.717822
+AUC: 0.512876
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#</span>
+<span class="c"># whoa, not very good - an roc auc just a little bit better</span>
+<span class="c"># than random chance and a big difference in error rates</span>
+<span class="c"># between training and test data implying overfitting</span>
+<span class="c">#</span></code></pre></figure> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># let's calibrate some params (in vectorizer &amp; classifier)</span>
+<span class="c"># and choose values that maximize roc auc</span>
+
+<span class="c"># the grid of params to search over</span>
+<span class="n">alphas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
+<span class="n">min_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+
+<span class="c"># loop through values to find optimal settings</span>
+<span class="n">best_alpha</span><span class="p">,</span> <span class="n">best_min_df</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+<span class="n">max_auc</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+<span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">alphas</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">min_df</span> <span class="ow">in</span> <span class="n">min_dfs</span><span class="p">:</span>
+        
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span> <span class="o">=</span> <span class="n">min_df</span><span class="p">)</span>
+
+        <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">get_xy</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">)</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>        
+        <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+        <span class="n">auc_val</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">auc_val</span> <span class="o">&gt;</span> <span class="n">max_auc</span><span class="p">:</span>
+            <span class="n">max_auc</span> <span class="o">=</span> <span class="n">auc_val</span>
+            <span class="n">best_alpha</span><span class="p">,</span> <span class="n">best_min_df</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">min_df</span> 
+
+                
+<span class="k">print</span> <span class="s">"alpha: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">best_alpha</span>
+<span class="k">print</span> <span class="s">"min_df: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">best_min_df</span>
+<span class="k">print</span> <span class="s">"best auc: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">max_auc</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alpha: 5.000000
+min_df: 0.020000
+best auc: 0.605254
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># let's make sure this new model is less over-fit</span>
+
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span> <span class="o">=</span> <span class="n">best_min_df</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">get_xy</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">best_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">"Accuracy on training data: </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">"Accuracy on test data:     </span><span class="si">%</span><span class="s">f"</span> <span class="o">%</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Accuracy on training data: 0.757756
+Accuracy on test data:     0.724752
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># finally, let's train on full training set with best params</span>
+<span class="c"># and save our predictions for submission</span>
+
+<span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span> <span class="o">=</span> <span class="n">best_min_df</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">get_xy</span><span class="p">(</span><span class="n">vectorizer</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MultinomialNB</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">best_alpha</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'_data'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'test'</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_test</span><span class="p">[</span><span class="s">'txt_clean'</span><span class="p">])</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">df_test</span><span class="p">[</span><span class="s">'requester_received_pizza'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+<span class="n">final_df</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[[</span><span class="s">'request_id'</span><span class="p">,</span> <span class="s">'requester_received_pizza'</span><span class="p">]]</span>
+
+<span class="c"># sanity check entries </span>
+<span class="k">print</span> <span class="n">final_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c"># output predictions</span>
+<span class="n">final_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'../output/predicted.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     request_id  requester_received_pizza
+4040   t3_i8iy4                  0.325085
+4041  t3_1mfqi0                  0.545561
+4042   t3_lclka                  0.242250
+4043  t3_1jdgdj                  0.167956
+4044   t3_t2qt4                  0.142908
+</code></pre></div></div> <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># and for funsies, let's see which words best predict getting a pizza </span>
+
+<span class="n">words</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">word_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">word_df</span><span class="p">[</span><span class="s">'word'</span><span class="p">]</span> <span class="o">=</span> <span class="n">words</span>
+<span class="n">word_df</span><span class="p">[</span><span class="s">'P(pizza | word)'</span><span class="p">]</span> <span class="o">=</span> <span class="n">probs</span>
+<span class="n">word_df</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">'P(pizza | word)'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">'good words'</span>
+<span class="k">print</span> <span class="n">word_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">'</span><span class="se">\n</span><span class="s">---</span><span class="se">\n</span><span class="s">'</span>
+<span class="k">print</span> <span class="s">'bad words'</span>
+<span class="k">print</span> <span class="n">word_df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></code></pre></figure> <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>good words
+           word  P(pizza | word)
+161         jpg         0.427790
+268        rice         0.383345
+157       imgur         0.364823
+325       tight         0.363433
+141     helping         0.361993
+235      person         0.354807
+345  unemployed         0.344983
+231    paycheck         0.338030
+233      paying         0.337769
+50        check         0.336646
+
+---
+
+bad words
+         word  P(pizza | word)
+34   birthday         0.181946
+169     leave         0.180133
+104   florida         0.175216
+326      till         0.172488
+112   friends         0.165682
+20       area         0.162599
+108      free         0.159392
+285   sitting         0.159047
+307  studying         0.155792
+111    friend         0.143568
+</code></pre></div></div> </article> </div> </div> <footer class='p1 center'> <img class='align-middle' src='/assets/img/misc/peace.gif' width='30'> </footer> <script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-37353161-5']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script> </body> </html>
