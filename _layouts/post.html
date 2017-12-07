@@ -1,0 +1,11 @@
+---
+layout: default
+---
+
+<div class='h6 gray'>{{ page.date | date: site.date_format }}</div>
+<h1 class='mt0 mb3 h2 sm-h0'>{{ page.title }}</h1>
+<article class='mb3 sm-col-4'>{{ content }}</article>
+
+{% for js in page.js %}
+  <script src='/assets/build/{{ js }}.js'></script>
+{% endfor %}

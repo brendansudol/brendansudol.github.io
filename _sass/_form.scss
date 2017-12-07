@@ -1,0 +1,68 @@
+input,
+select,
+textarea,
+fieldset {
+  font-family: $form-field-font-family;
+  font-size: $form-field-font-size;
+  box-sizing: border-box;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+label {
+  vertical-align: middle;
+}
+
+input[type=text],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=time],
+input[type=url],
+input[type=week] {
+  height: $form-field-height;
+  padding: $form-field-padding-y $form-field-padding-x;
+  vertical-align: middle;
+  -webkit-appearance: none;
+}
+
+select {
+  line-height: 1.75;
+  padding: $form-field-padding-y $form-field-padding-x;
+}
+
+select:not([multiple]) {
+  height: $form-field-height;
+  vertical-align: middle;
+}
+
+textarea {
+  line-height: 1.75;
+  padding: $form-field-padding-y $form-field-padding-x;
+}
+
+.field {
+  border-style: solid;
+  border-width: $border-width;
+  border-color: $border-color;
+  border-radius: $border-radius;
+}
+
+.field:focus,
+.field.is-focused {
+  outline: none;
+  border-color: $field-focus-color;
+  box-shadow: 0 0 0 2px rgba($field-focus-color, .5);
+}
+
+.field:disabled,
+.field.is-disabled {
+  background-color: $darken-2;
+  opacity: .5;
+}

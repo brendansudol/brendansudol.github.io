@@ -1,0 +1,40 @@
+// scss-lint:disable VendorPrefix
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: $white;
+  color: $black;
+  font-family: $sans-serif-font-family;
+  font-size: 100%;
+  line-height: 1.5;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font-family;
+  font-weight: $heading-font-weight;
+  line-height: $heading-line-height;
+  margin-bottom: $heading-margin-bottom;
+  margin-top: $heading-margin-top;
+}
+
+p {
+  margin-bottom: $paragraph-margin-bottom;
+  margin-top: $paragraph-margin-top;
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+a {
+  color: $link-color;
+  text-decoration: $link-text-decoration;
+}
+
+img { max-width: 100%; }

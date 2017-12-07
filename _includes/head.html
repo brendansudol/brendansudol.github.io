@@ -1,0 +1,37 @@
+{% assign title = site.title | strip_html %}
+{% if page.title %}{% assign title = page.title | strip_html %}{% endif %}
+{% capture feather %}{% include feather.scss %}{% endcapture %}
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{ title }}</title>
+  {% if page.summary %}
+  <meta name="description" content="{{ page.summary | xml_escape }}">
+  {% endif %}
+  <meta name="author" content="{{ site.author }}">
+  {% if page.categories %}
+  <meta name="keywords" content="{{ page.categories | join: ', ' }}">
+  {% endif %}
+
+  <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{% if page.summary %}{{ page.summary }}{% else %}{{ title }}{% endif %}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url | replace:'index.html','' }}">
+  <meta property="og:site_name" content="{{ site.title | xml_escape }}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@{{ site.twitter_username }}">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{% if page.summary %}{{ page.summary }}{% else %}{{ title }}{% endif %}">
+  <meta name="twitter:url" content="{{ site.url }}{{ page.url | replace:'index.html','' }}">
+  <meta name="twitter:image" content="{{ site.url }}{% if page.share_img %}{{ page.share_img }}{% else %}/assets/img/misc/bren-doodle-color.png{% endif %}">
+
+  {% if page.layout == 'post' or page.all_css %}
+    <link rel="stylesheet" href="{{ '/assets/css/all.css' | prepend: site.baseurl }}?{{ site.time | date: '%Y%m%d%H%M' }}">
+  {% else %}
+    <style>{{ feather | scssify }}</style>
+  {% endif %}
+</head>

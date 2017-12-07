@@ -1,0 +1,99 @@
+title: Brendan Sudol
+email: brendansudol@gmail.com
+author: Brendan Sudol
+description: A simple site by a simple guy
+
+baseurl: ""
+url: "https://www.brendansudol.com"
+
+google_analytics: UA-37353161-5
+
+date_format: "%B %Y"
+permalink: /writing/:title
+
+markdown: kramdown
+
+sass:
+  style: compressed
+
+include:
+  - _pages
+
+keep_files:
+  - assets/build
+
+exclude:
+  - assets/src
+  - node_modules
+  - CNAME
+  - NOTES
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+
+projects:
+- title: Team Coco
+  url: https://brendansudol.github.io/conan-jokes/
+  summary: Search and explore Conan’s monologue jokes (2010—2017)
+- title: DC Food Trucks Today
+  url: http://dcfoodtrucks.today
+  summary: A real-time(ish) map of yummy food trucks in the DC area
+- title: DC Metro Catcher
+  url: https://metrocatcher.com
+  summary: When's the next train coming? Should you run to catch it?
+- title: Hi-Lo Practice
+  url: https://brendansudol.github.io/card-counting-game/
+  summary: Practice your blackjack card counting skillz.
+- title: Find it! (Emoji Edition)
+  url: http://brendansudol.github.io/find-emoji/
+  summary: >
+    A fast, simple game to find the one common emoji. Inspired by "Spot it!"
+- title: Emojwe
+  url: http://emoj-we.com
+  summary: >
+    A tool to make emojis that include everyone. ❤️️
+- title: Vinobot
+  url: http://www.vinobot.co
+  summary: >
+    A tipsy little robot that generates ridiculous wine tasting
+    notes.
+- title: English ➝ Emoji
+  url: http://emojist.com/?q=boom
+  summary: >
+    Translate boring English (😕🇬🇧) into awesome Emoji (💥🎉)
+- title: Jeopractice
+  url: http://www.jeopractice.com
+  summary: >
+    Practice your Jeopardy! skills with 200,000+ questions
+    from 30 years of shows. 
+- title: College Rankings
+  url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
+  summary: A create-your-own Top Colleges list based on the things important to you.
+- title: Noodle Fuel
+  url: http://www.noodlefuel.com
+  img: noodlefuel.png
+  summary: Interesting articles and nuggets of knowledge to get your day started right.
+- title: Uncoverly
+  url: http://www.uncoverly.com
+  img: uncoverly.png
+  summary: Discover the best and most beautiful products on Etsy.
+- title: Libby & Brendan
+  url: http://www.libbyandbrendan.com
+  img: libsandbren.png
+  summary: I'm getting married. :)
+- title: Pongsy
+  url: http://etsy-pongsy.herokuapp.com
+  img: pongsy.png
+  summary: >
+    A simple score tracker that uses the Elo Rating System to rank
+    players. Designed for easy entry on an iPad after intense ping
+    pong matches at work.
+- title: The NitPickster
+  url: http://www.thenitpickster.com
+  img: nitpickster.png
+  summary: >
+    "Protecting the English language, one tweet at a time: a twitter
+    bot that searches for and corrects those who make small spelling
+    and grammar mistakes."

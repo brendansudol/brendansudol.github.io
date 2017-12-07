@@ -1,0 +1,3 @@
+iframe { box-sizing: border-box; }
+.iframe-deck { height: 300px; width: 100%; }
+@media #{$breakpoint-sm} { .iframe-deck { height: 460px; } }

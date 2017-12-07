@@ -1,0 +1,10 @@
+.align-middle { vertical-align: middle; }
+.border { border: 1px solid #eee; }
+.border-bottom-dotted { border-bottom: 1px dotted #111; }
+.list-reset { list-style: none; padding-left: 0; }
+.mt-tiny { margin-top: .25rem; }
+.rounded { border-radius: 4px; }
+
+@media #{$breakpoint-lg} {
+  .post-extra-wide { margin-right: -5rem; }
+}

@@ -1,0 +1,320 @@
+/* base viz styles
+-------------------------------------- */
+
+svg {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+
+/* clever counties
+-------------------------------------- */
+
+#viz-clever-counties .states {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+
+#viz-clever-counties .counties path {
+  fill: steelblue;
+  stroke: #fff;
+  stroke-width: .2px;
+}
+
+#viz-clever-counties .counties path:hover {
+  stroke-width: 1.5px;
+  stroke: red;
+  cursor: pointer;
+}
+
+
+/* nyc
+-------------------------------------- */
+
+#viz-nyc svg {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#viz-nyc path {
+  fill: none;
+  stroke: #aaa;
+  stroke-dasharray: 2, 2;
+  stroke-linejoin: round;
+}
+
+#viz-nyc .fips_36047 {
+  fill: #EDBB99;
+  stroke: none;
+}
+
+#viz-nyc .fips_36085 {
+  fill: #F9B3AE;
+  stroke: none;
+}
+
+#viz-nyc .fips_36061 {
+  fill: #FFF1A5;
+  stroke: none;
+}
+
+#viz-nyc .fips_36081 {
+  fill: #CAE6B3;
+  stroke: none;
+}
+
+#viz-nyc .fips_36005 {
+  fill: #99D3E1;
+  stroke: none;
+}
+
+#viz-nyc .county-label {
+  fill: #666;
+  fill-opacity: .8;
+  font-size: 14px;
+  font-weight: 300;
+  text-anchor: middle;
+}
+
+#viz-nyc .other-label {
+  fill-opacity: .4;
+  font-size: 10px;
+  text-anchor: start;
+}
+
+#viz-nyc text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  pointer-events: none;
+}
+
+
+/* world cup draw
+-------------------------------------- */
+
+#viz-world-cup svg {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+#viz-world-cup .team {
+  fill: #fff;
+}
+
+
+/* js countdown
+-------------------------------------- */
+
+#countdown {
+  font: 54px Menlo;
+}
+
+
+/* snow falling
+-------------------------------------- */
+
+#sky {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
+  background-color: #222;
+  border-radius: 3px;
+}
+
+
+/* texture.js demo
+-------------------------------------- */
+
+#viz-texturejs-demo .graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+#viz-texturejs-demo .graticule.outline {
+  stroke-width: 3px;
+}
+
+
+/* soccer outcome probs
+-------------------------------------- */
+
+#viz-soccer-outcomes {
+  font-size: 14px;
+}
+
+#viz-soccer-outcomes .prob {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+#viz-soccer-outcomes .prob .p-val {
+  font-weight: bold;
+}
+
+#viz-soccer-outcomes .p-win {
+  color: #2ecc71;
+}
+
+#viz-soccer-outcomes .p-draw {
+  color: #3498db;
+}
+
+#viz-soccer-outcomes .p-lose {
+  color: #e74c3c;
+}
+
+#viz-soccer-outcomes .p-games {
+  color: #555;
+}
+
+#viz-soccer-outcomes .y.axis path {
+  display: none;
+}
+
+#viz-soccer-outcomes .y.axis line {
+  stroke-dasharray: 2, 3;
+  stroke-opacity: 0.2;
+}
+
+#viz-soccer-outcomes .line {
+  fill: none;
+  stroke-width: 3.5px;
+}
+
+#viz-soccer-outcomes .overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+#viz-soccer-outcomes .focus line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  stroke-dasharray: 3, 3;
+}
+
+
+/* usa to dots to scatterplot
+-------------------------------------- */
+
+#restart-usa-scatter {
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+#viz-usa-to-scatter .state {
+  fill: #ccc;
+  stroke: none;
+}
+
+#viz-usa-to-scatter .dot circle {
+  fill: #0076df;
+  stroke: #fff;
+}
+
+#viz-usa-to-scatter .dot text {
+  font-size: 6px;
+  fill: #fff;
+}
+
+#viz-usa-to-scatter .footnote {
+  fill: #000;
+}
+
+
+/* states, united
+-------------------------------------- */
+
+#viz-states-united {
+  max-width: 500px;
+}
+
+#viz-states-united .rainbow-circle {
+  opacity: 0.6;
+}
+
+#viz-states-united .state {
+  fill: #fff;
+  filter: url(#viz-shadow);
+}
+
+#viz-states-united .state-label {
+  fill: #fff;
+  text-anchor: middle;
+  font-size: 16px;
+}
+
+
+/* google logo animate viz
+-------------------------------------- */
+
+#viz-google-dots svg {
+  width: 250px;
+  height: 150px;
+}
+
+#viz-google-dots .blue {
+  fill: #4883ee;
+}
+
+#viz-google-dots .red {
+  fill: #dc3238;
+}
+
+#viz-google-dots .yellow {
+  fill: #f6c20a;
+}
+
+#viz-google-dots .green {
+  fill: #3dbb56;
+}
+
+
+/* epl standings scenarios
+-------------------------------------- */
+
+.epl-form {
+  line-height: 3;
+}
+
+.epl-form input[type="number"] {
+  width: 70px;
+}
+
+
+/* tts logo animate
+-------------------------------------- */
+
+#viz-tts-animate {
+  position: relative;
+  height: 300px;
+  background-color: #1c5295;
+}
+
+@media #{$breakpoint-sm} {
+  #viz-tts-animate { height: 400px; }
+}
+
+#viz-tts-animate svg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+#viz-tts-animate rect {
+  fill: #fff;
+  opacity: 0;
+}

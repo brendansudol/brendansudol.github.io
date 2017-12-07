@@ -1,0 +1,33 @@
+{
+  "name": "bren",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "clean": "shx rm -rf _site/",
+    "dev": "concurrently -k 'webpack -w' 'bundle exec jekyll serve'",
+    "build": "npm run clean && NODE_ENV=production webpack -p && bundle exec jekyll build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d _site"
+  },
+  "dependencies": {
+    "d3": "^3.5.17",
+    "d3-geo-projection": "^0.2.16",
+    "d3-queue": "^1.2.2",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "textures": "^1.2.0",
+    "topojson": "^1.6.27"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
+    "gh-pages": "^1.1.0",
+    "shx": "^0.2.2",
+    "webpack": "^3.9.1"
+  },
+  "babel": {
+    "presets": ["env"]
+  }
+}
