@@ -36,6 +36,11 @@ exclude:
   - webpack.config.js
 
 projects:
+- title: AI Joke Generation
+  url: https://brendansudol.com/neural-jokes/
+  summary: >
+    This interactive experiment lets you generate jokes with a recurrent neural
+    network.
 - title: Better Know Your Area
   url: http://betterknowyourarea.com
   summary: >
