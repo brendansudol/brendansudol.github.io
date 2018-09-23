@@ -1,37 +1,38 @@
 $black: #111111 !default;
-$gray: #AAAAAA !default;
-$white: #FFFFFF !default;
-$blue: #0074D9 !default;
-$navy: #001F3F !default;
-$green: #2ECC40 !default;
-$orange: #FF851B !default;
-$red: #FF4136 !default;
+$gray: #aaaaaa !default;
+$white: #ffffff !default;
+$blue: #0074d9 !default;
+$navy: #001f3f !default;
+$green: #2ecc40 !default;
+$orange: #ff851b !default;
+$red: #ff4136 !default;
 
-$darken-1: rgba(0, 0, 0, .0625) !default;
-$darken-2: rgba(0, 0, 0, .125) !default;
-$darken-3: rgba(0, 0, 0, .25) !default;
-$darken-4: rgba(0, 0, 0, .5) !default;
+$darken-1: rgba(0, 0, 0, 0.0625) !default;
+$darken-2: rgba(0, 0, 0, 0.125) !default;
+$darken-3: rgba(0, 0, 0, 0.25) !default;
+$darken-4: rgba(0, 0, 0, 0.5) !default;
 
 $h0: 2.75rem !default;
 $h1: 2.25rem !default;
 $h2: 1.5rem !default;
 $h3: 1.25rem !default;
 $h4: 1rem !default;
-$h5: .875rem !default;
-$h6: .75rem !default;
+$h5: 0.875rem !default;
+$h6: 0.75rem !default;
 
-$space-1: .5rem !default;
+$space-1: 0.5rem !default;
 $space-2: 1rem !default;
 $space-3: 2rem !default;
 $space-4: 3rem !default;
 
-$container-width: 690px !default;
+$container-width: 680px !default;
 $breakpoint-sm: '(min-width: 40em)' !default;
 $breakpoint-md: '(min-width: 52em)' !default;
 $breakpoint-lg: '(min-width: 64em)' !default;
 
 $serif-font-family: georgia, times, serif !default;
-$sans-serif-font-family: -apple-system, BlinkMacSystemFont, helvetica, sans-serif !default;
+$sans-serif-font-family: -apple-system, BlinkMacSystemFont, helvetica,
+    sans-serif !default;
 $monospace-font-family: consolas, courier, monospace !default;
 $bold-font-weight: 600 !default;
 
@@ -39,7 +40,7 @@ $heading-font-family: $sans-serif-font-family !default;
 $heading-font-weight: $bold-font-weight !default;
 $heading-line-height: 1.25 !default;
 $heading-margin-top: 1em !default;
-$heading-margin-bottom: .5em !default;
+$heading-margin-bottom: 0.5em !default;
 $paragraph-margin-top: 0 !default;
 $paragraph-margin-bottom: $space-2 !default;
 
@@ -54,7 +55,7 @@ $button-font-family: inherit !default;
 $button-font-size: inherit !default;
 $button-font-weight: $bold-font-weight !default;
 $button-line-height: 1.125rem !default;
-$button-padding-y: .5rem !default;
+$button-padding-y: 0.5rem !default;
 $button-padding-x: 1rem !default;
 $button-color: $white !default;
 $button-background-color: $blue !default;
@@ -62,10 +63,10 @@ $button-background-color: $blue !default;
 $form-field-font-family: inherit !default;
 $form-field-font-size: 1rem !default;
 $form-field-height: 2.25rem !default;
-$form-field-padding-y: .5rem !default;
-$form-field-padding-x: .5rem !default;
+$form-field-padding-y: 0.5rem !default;
+$form-field-padding-x: 0.5rem !default;
 $field-focus-color: $blue !default;
 
 $table-header-font-weight: $bold-font-weight !default;
 $table-cell-padding-x: $space-2 !default;
-$table-cell-padding-y: .25rem !default;
+$table-cell-padding-y: 0.25rem !default;

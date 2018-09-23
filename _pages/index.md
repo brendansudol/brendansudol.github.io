@@ -3,15 +3,13 @@ layout: skinny
 permalink: /
 ---
 
-Hello! I’m Brendan. I'm a software developer based in Washington, D.C. I work at
-[18F](https://18f.gsa.gov/) to deliver better government services through
-technology and design. Prior to that, I did data science at
-[Etsy](https://www.etsy.com/) and helped build an analytics startup called
-[Simon](https://www.simondata.com). In my spare time, I like making
-[fun things](/projects) on the web, playing golf, and using oxford commas.
+<p class='sm-col-4'>
+  Hello! I’m Brendan. I'm a software developer living in Washington, D.C. I like
+  making things on the web. I also really like golf.
+</p>
 
 <h4 class='mt4'>Recent Writing</h4>
-<ul class='m0 list-reset'>
+<ul class='m0 list-reset sm-col-4'>
   {% for post in site.posts limit:4 %}
     <li class='mb1'>
       <a href='{{ post.url | prepend: site.baseurl }}'>{{ post.title }}</a>
@@ -21,7 +19,7 @@ technology and design. Prior to that, I did data science at
 </ul>
 
 <h4 class='mt4'>Recent Projects</h4>
-<ul class='m0 list-reset'>
+<ul class='m0 list-reset sm-col-4'>
   {% for project in site.projects limit:4 %}
     <li class='mb1'>
       <a target='_blank' href='{{ project.url }}'>{{ project.title }}</a>

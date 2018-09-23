@@ -36,6 +36,9 @@ exclude:
   - webpack.config.js
 
 projects:
+- title: Wemoji
+  url: https://getwemoji.com
+  summary: Inclusive emojis. We're better together.
 - title: AI Joke Generation
   url: https://brendansudol.com/neural-jokes/
   summary: >
@@ -62,9 +65,6 @@ projects:
   url: http://brendansudol.github.io/find-emoji/
   summary: >
     A fast, simple game to find the one common emoji. Inspired by "Spot it!"
-- title: Emojwe
-  url: http://emoj-we.com
-  summary: A tool to make emojis that include everyone. ❤️️
 - title: Vinobot
   url: http://www.vinobot.co
   summary: A tipsy little robot that generates ridiculous wine tasting notes.
