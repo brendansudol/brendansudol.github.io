@@ -9,9 +9,10 @@ h6, .h6 { font-size: $h6; }
 @media #{$breakpoint-sm} { .sm-h0 { font-size: $h0; } }
 
 .bold { font-weight: $bold-font-weight; }
+.extra-bold { font-weight: 800; }
 .regular { font-weight: normal; }
 .italic { font-style: italic; }
-.caps { letter-spacing: .2em; text-transform: uppercase; }
+.caps { letter-spacing: .1em; text-transform: uppercase; }
 .underline { text-decoration: underline; }
 
 .left-align { text-align: left; }
@@ -21,3 +22,4 @@ h6, .h6 { font-size: $h6; }
 .serif { font-family: $serif-font-family; }
 .sans-serif { font-family: $sans-serif-font-family; }
 .mono, .monospace { font-family: $monospace-font-family; }
+.measure { max-width: 30em; }

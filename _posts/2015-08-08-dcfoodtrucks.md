@@ -25,7 +25,7 @@ I was inspired to make this because:
 If you're a food truck owner, you can log in with your Twitter account to
 further customize your locations throughout the day:
 
-![DC Food Trucks Today](/assets/img/writing/dcfoodtrucks2.png){: .sm-col-4 }
+![DC Food Trucks Today](/assets/img/writing/dcfoodtrucks2.png){: .sm-col-9 }
 
 There's still a few more things I'd like to add (for example, allowing users to
 add trucks / locations that are missing, search functionality, the ability for

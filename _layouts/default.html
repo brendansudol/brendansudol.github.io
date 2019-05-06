@@ -6,11 +6,11 @@ layout: compress
 <html lang="en">
 {% include head.html %}
 <body class='site'>
+  {% include header2.html %}
   <div class='site-wrap'>
-    {% include header.html %}
     <div class='container mx-auto pl2 pr2'>{{ content }}</div>
   </div>
-  {% include footer.html %}
+  {% include footer2.html %}
   {% include analytics.html %}
   <script src="{{ '/assets/misc/fun.js' | prepend: site.baseurl }}"></script>
 </body>
