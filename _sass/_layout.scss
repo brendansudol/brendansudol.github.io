@@ -25,7 +25,9 @@ footer {
   flex: none;
 }
 
-.container { max-width: $container-width; }
+.container { max-width: 580px; }
+.container-wide { max-width: 900px; }
+
 .col { float: left; box-sizing: border-box; }
 .col-1 { width: (1 / 12 * 100%); }
 .col-2 { width: (2 / 12 * 100%); }

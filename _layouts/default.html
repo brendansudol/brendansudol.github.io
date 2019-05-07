@@ -2,13 +2,16 @@
 layout: compress
 ---
 
+{% assign container = 'container' %}
+{% if page.is_wide %}{% assign container = 'container-wide' %}{% endif %}
+
 <!doctype html>
 <html lang="en">
 {% include head.html %}
 <body class='site'>
   {% include header2.html %}
   <div class='site-wrap'>
-    <div class='container mx-auto pl2 pr2'>{{ content }}</div>
+    <div class='{{ container }} mx-auto px2'>{{ content }}</div>
   </div>
   {% include footer2.html %}
   {% include analytics.html %}

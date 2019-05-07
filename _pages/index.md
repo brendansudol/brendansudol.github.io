@@ -1,30 +1,52 @@
 ---
-layout: skinny
+layout: default
 permalink: /
+is_wide: true
 ---
 
-<p class='sm-col-9'>
-  Hello! I’m Brendan. I'm a software developer living in Washington, D.C. I like
-  making things on the web. I also really like golf.
+<p class='mb4 h3 measure'>
+  Hi there! I’m Brendan. I'm a software engineer based in Washington, D.C.
+  I love building things on the web. I also like reading and golf.
 </p>
 
-<h4 class='mt4'>Recent Writing</h4>
-<ul class='m0 list-reset sm-col-9'>
-  {% for post in site.posts limit:4 %}
-    <li class='mb1'>
-      <a href='{{ post.url | prepend: site.baseurl }}'>{{ post.title }}</a>
-    </li>
+<h2 class='mb3 h5 caps'>Projects</h2>
+<div class='mb3 flex flex-wrap mxn2'>
+  {% for project in site.projects %}
+    <div class='flex col-6 sm-col-4 px2 mb3'>
+      <div class='sm-flex'>
+        <a class='flex-none mr2 block icon-container' href='{{ project.url }}'>
+          {% if project.icon contains '.svg' %}
+            {% include svg/icon/{{ project.icon }} %}
+          {% else %}
+            <img src="{{ project.icon | prepend: '/assets/img/icon/' }}" />
+          {% endif %}
+        </a>
+        <div class='flex-auto'>
+          <a class='black extra-bold' target='_blank' href='{{ project.url }}'>{{ project.title }}</a>
+          <span class='gray'>{{ project.summary }}</span>
+        </div>
+      </div>
+    </div>
   {% endfor %}
-  <li class='mb1'><a class='italic' href='/writing'>View more...</a></li>
-</ul>
+</div>
 
-<h4 class='mt4'>Recent Projects</h4>
-<ul class='m0 list-reset sm-col-9'>
-  {% for project in site.projects limit:4 %}
-    <li class='mb1'>
-      <a target='_blank' href='{{ project.url }}'>{{ project.title }}</a>
-      <div>{{ project.summary }}</div>
-    </li>
+<h2 class='mb3 h5 caps'>Mini Projects</h2>
+<div class='flex flex-wrap mxn2'>
+  {% for project in site.mini_projects %}
+    <div class='flex col-6 sm-col-4 px2 mb3'>
+      <div class='sm-flex'>
+        <a class='flex-none mr2 block icon-container' target='_blank' href='{{ project.url }}'>
+          {% if project.icon contains '.svg' %}
+            {% include svg/icon/{{ project.icon }} %}
+          {% else %}
+            <img src="{{ project.icon | prepend: '/assets/img/icon/' }}" />
+          {% endif %}
+        </a>
+        <div class='flex-auto'>
+          <a class='black extra-bold' target='_blank' href='{{ project.url }}'>{{ project.title }}</a>
+          <span class='gray'>{{ project.summary }}</span>
+        </div>
+      </div>
+    </div>
   {% endfor %}
-  <li class='mb1'><a class='italic' href='/projects'>View more...</a></li>
-</ul>
+</div>

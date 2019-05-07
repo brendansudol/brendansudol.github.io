@@ -36,127 +36,60 @@ exclude:
   - webpack.config.js
 
 projects:
-  - title: Wemoji
-    url: https://getwemoji.com
-    summary: Inclusive emojis. We're better together.
-  - title: AI Joke Generation
-    url: https://brendansudol.com/neural-jokes/
-    summary: >
-      This interactive experiment lets you generate jokes with a recurrent neural
-      network.
-  - title: Better Know Your Area
-    url: http://betterknowyourarea.com
-    summary: >
-      An at-a-glance look at social, economic, demographic, and housing data for
-      places in the U.S.
-  - title: Team Coco
-    url: https://brendansudol.github.io/conan-jokes/
-    summary: Search and explore Conan’s monologue jokes (2010—2017)
-  - title: DC Food Trucks Today
-    url: http://dcfoodtrucks.today
-    summary: A real-time(ish) map of yummy food trucks in the DC area
-  - title: DC Metro Catcher
-    url: https://metrocatcher.com
-    summary: When's the next train coming? Should you run to catch it?
-  - title: Hi-Lo Practice
-    url: https://brendansudol.github.io/card-counting-game/
-    summary: Practice your blackjack card counting skillz.
-  - title: Spot it - Emoji Edition
-    url: http://brendansudol.github.io/find-emoji/
-    summary: >
-      A fast, simple game to find the one common emoji. Inspired by "Spot it!"
-  - title: Vinobot
-    url: http://www.vinobot.co
-    summary: A tipsy little robot that generates ridiculous wine tasting notes.
-  - title: English ➝ Emoji
-    url: http://emojist.com/?q=boom
-    summary: Translate boring English (😕🇬🇧) into awesome Emoji (💥🎉)
-  - title: Jeopractice
-    url: http://www.jeopractice.com
-    summary: >
-      Practice your Jeopardy! skills with 200,000+ questions from 30 years of
-      shows.
-  - title: College Rankings
-    url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
-    summary: >
-      A create-your-own Top Colleges list based on the things important to you.
-  - title: Noodle Fuel
-    url: http://www.noodlefuel.com
-    img: noodlefuel.png
-    deprecated: true
-    summary: >
-      Interesting articles and nuggets of knowledge to get your day started right.
-  - title: Uncoverly
-    url: http://www.uncoverly.com
-    img: uncoverly.png
-    summary: Discover the best and most beautiful products on Etsy.
-  - title: Libby & Brendan
-    url: http://www.libbyandbrendan.com
-    img: libsandbren.png
-    summary: I'm getting married. :)
-  - title: Pongsy
-    url: http://etsy-pongsy.herokuapp.com
-    img: pongsy.png
-    deprecated: true
-    summary: >
-      A simple score tracker that uses the Elo Rating System to rank
-      players. Designed for easy entry on an iPad after intense ping
-      pong matches at work.
-  - title: The NitPickster
-    url: http://www.thenitpickster.com
-    img: nitpickster.png
-    deprecated: true
-    summary: >
-      "Protecting the English language, one tweet at a time: a twitter
-      bot that searches for and corrects those who make small spelling
-      and grammar mistakes."
-
-projects_new:
   - title: Late Night LOL
     url: https://latenightlol.com
-    summary: 10+ years. 35k+ jokes. All your favorite late night hosts.
+    summary: 35k+ monologue jokes. 10+ years. All your favorite late night hosts.
     icon: 1f923.svg
   - title: Wemoji
     url: https://getwemoji.com
     icon: clapping-hands-sign.gif
-    summary: Inclusive emojis because we're better together.
-  - title: Better Know Your Area
-    url: http://betterknowyourarea.com
-    icon: 1f5fa.svg
-    summary: >
-      An at-a-glance look at social, economic, and housing data in the U.S
-  - title: DC Food Trucks Today
-    url: http://dcfoodtrucks.today
-    icon: 1f69a.svg
-    summary: A real-time(ish) map of yummy food trucks in the DC area
-  - title: DC Metro Catcher
-    url: https://metrocatcher.com
-    icon: 1f687.svg
-    summary: When's the next train coming? Should you run to catch it?
+    summary: Animated, inclusive emojis. We're better together.
   - title: Vinobot
     url: http://www.vinobot.co
     icon: 1f377.svg
     summary: A tipsy little robot that generates ridiculous wine tasting notes.
+  - title: Better Know Your Area
+    url: http://betterknowyourarea.com
+    icon: 1f5fa.svg
+    summary: Explore social, economic, and housing data across the United States.
+  - title: DC Food Trucks Today
+    url: http://dcfoodtrucks.today
+    icon: 1f69a.svg
+    summary: A real-time(ish) map of yummy food trucks in the DC area
   - title: Jeopractice
     url: http://www.jeopractice.com
     icon: 1f4da.svg
-    summary: Practice Jeopardy! with 200,000+ questions from 30 years of shows.
+    summary: Practice Jeopardy! with 200k questions from 30 years of shows.
   - title: Uncoverly
     url: http://www.uncoverly.com
     icon: 1f9f6.svg
     summary: Discover the best and most beautiful products on Etsy.
 
 mini_projects:
-  - title: AI Joke Generation
-    url: https://brendansudol.com/neural-jokes/
-    icon: 1f916.svg
-    summary: >
-      This interactive experiment lets you generate jokes with a recurrent neural
-      network.
+  - title: The Winterfallen
+    url: https://thewinterfallen.com
+    icon: night-king.png
+    summary: Predict and share who you think will die in the Battle of Winterfell.
+  - title: Emotion Extractor
+    url: https://brendansudol.com/faces/
+    icon: 1f3ad.svg
+    summary: Detect faces and classify emotions with Tensorflow.js. 
   - title: Team Coco
     url: https://brendansudol.github.io/conan-jokes/
     icon: conan.jpg
-    summary: Search and explore Conan’s monologue jokes (2010—2017)
+    summary: Search and explore Conan’s monologue jokes (2010—2018).
+  - title: AI Joke Generation
+    url: https://brendansudol.com/neural-jokes/
+    icon: 1f916.svg
+    summary: Generate jokes with a recurrent neural network.
+  - title: DC Metro Catcher
+    url: https://metrocatcher.com
+    icon: 1f687.svg
+    summary: When's the next train coming? Should you run to catch it?
+  - title: United Statemojis
+    url: https://brendansudol.com/emoji-usa/viz/top4/
+    icon: 1f1fa-1f1f2.svg
+    summary: Explore emoji usage on Twitter by U.S. state.
   - title: Hi-Lo Practice
     url: https://brendansudol.github.io/card-counting-game/
     icon: 1f3b0.svg
@@ -164,37 +97,25 @@ mini_projects:
   - title: Spot it - Emoji Edition
     url: http://brendansudol.github.io/find-emoji/
     icon: 1f9d0.svg
-    summary: >
-      A fast, simple game to find the one common emoji. Inspired by "Spot it!"
-  - title: English ➝ Emoji
-    url: http://emojist.com/?q=boom
-    icon: 1f4ac.svg
-    summary: Translate boring English (😕🇬🇧) into awesome Emoji (💥🎉)
+    summary: A fast, simple game to find the one shared emoji.
   - title: College Rankings
     url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
     icon: 1f393.svg
-    summary: >
-      A create-your-own Top Colleges list based on the things important to you.
-  - title: United Statemojis
-    url: https://brendansudol.com/emoji-usa/viz/top4/
-    icon: 1f1fa-1f1f2.svg
-    summary: TODO
+    summary: Create your own Top Colleges list based on your interests.
   - title: Presidential Pick'em
     url: https://brendansudol.com/electoral-map-viz
-    icon: 1f1fa-1f1f2.svg
-    summary: TODO
-  - title: The Winterfallen
-    url: https://thewinterfallen.com
-    icon: night-king.png
-    summary: TODO
+    icon: 1f5f3.svg
+    summary: Create your own presidential election forecast.
   - title: Alpha Bravo Charlie
     url: https://brendansudol.com/alpha-bravo-charlie/#abc=nato&txt=WTF!
     icon: 1f524.svg
-    summary: Convert names / phrases with a phonetic alphabet to aid with spelling and clarity.
-  - title: Emotion Extractor
-    url: https://brendansudol.com/faces/
-    icon: 1f3ad.svg
-    summary: TODO
+    summary: Convert words and phrases to a phonetic alphabet.
+  - title: English ➝ Emoji
+    url: http://emojist.com/?q=boom
+    icon: 1f4ac.svg
+    summary: Translate boring English into awesome Emoji.
+
+work_in_progress:
   - title: Circles
     url: TODO
     icon: 1f7e3.svg
@@ -206,9 +127,8 @@ defunct:
     icon: 1f3d3.svg
     deprecated: true
     summary: >
-      A simple score tracker that uses the Elo Rating System to rank
-      players. Designed for easy entry on an iPad after intense ping
-      pong matches at work.
+      A simple score tracker based on Elo Rating System. Designed
+      for easy entry after intense ping pong matches at Etsy.
   - title: The NitPickster
     url: http://www.thenitpickster.com
     icon: 1f989.svg
