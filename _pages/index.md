@@ -5,8 +5,8 @@ is_wide: true
 ---
 
 <p class='mb4 h3 measure'>
-  Hi there! I’m Brendan. I'm a software engineer based in Washington, D.C.
-  I love building things on the web. I also like reading and golf.
+  Hello! I’m Brendan. I'm a software engineer based in Washington, D.C.
+  I love building things on the web. I also really like to read and play golf.
 </p>
 
 <h2 class='mb3 h5 caps'>Projects</h2>

@@ -25,14 +25,12 @@ $space-2: 1rem !default;
 $space-3: 2rem !default;
 $space-4: 3rem !default;
 
-$container-width: 720px !default;
 $breakpoint-sm: '(min-width: 40em)' !default;
 $breakpoint-md: '(min-width: 52em)' !default;
 $breakpoint-lg: '(min-width: 64em)' !default;
 
 $serif-font-family: georgia, times, serif !default;
-$sans-serif-font-family: -apple-system, BlinkMacSystemFont, helvetica,
-    sans-serif !default;
+$sans-serif-font-family: -apple-system, BlinkMacSystemFont, helvetica, sans-serif !default;
 $monospace-font-family: consolas, courier, monospace !default;
 $bold-font-weight: 600 !default;
 

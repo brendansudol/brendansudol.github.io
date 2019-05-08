@@ -38,7 +38,7 @@ exclude:
 projects:
   - title: Late Night LOL
     url: https://latenightlol.com
-    summary: 35k+ monologue jokes. 10+ years. All your favorite late night hosts.
+    summary: 35k+ monologue jokes. 10+ years. All your favorite hosts.
     icon: 1f923.svg
   - title: Wemoji
     url: https://getwemoji.com
@@ -51,15 +51,15 @@ projects:
   - title: Better Know Your Area
     url: http://betterknowyourarea.com
     icon: 1f5fa.svg
-    summary: Explore social, economic, and housing data across the United States.
+    summary: Explore social, economic, and housing data in the USA.
   - title: DC Food Trucks Today
     url: http://dcfoodtrucks.today
     icon: 1f69a.svg
-    summary: A real-time(ish) map of yummy food trucks in the DC area
+    summary: A real-time(ish) map of yummy food trucks in the DC area.
   - title: Jeopractice
     url: http://www.jeopractice.com
     icon: 1f4da.svg
-    summary: Practice Jeopardy! with 200k questions from 30 years of shows.
+    summary: Practice Jeopardy! questions from 30+ years of shows.
   - title: Uncoverly
     url: http://www.uncoverly.com
     icon: 1f9f6.svg
@@ -69,15 +69,15 @@ mini_projects:
   - title: The Winterfallen
     url: https://thewinterfallen.com
     icon: night-king.png
-    summary: Predict and share who you think will die in the Battle of Winterfell.
+    summary: Predict and share who will die in the Battle of Winterfell.
   - title: Emotion Extractor
     url: https://brendansudol.com/faces/
     icon: 1f3ad.svg
     summary: Detect faces and classify emotions with Tensorflow.js. 
   - title: Team Coco
     url: https://brendansudol.github.io/conan-jokes/
-    icon: conan.jpg
-    summary: Search and explore Conan’s monologue jokes (2010—2018).
+    icon: conan.png
+    summary: Search and explore Conan’s monologue jokes (2010-18).
   - title: AI Joke Generation
     url: https://brendansudol.com/neural-jokes/
     icon: 1f916.svg
@@ -85,11 +85,11 @@ mini_projects:
   - title: DC Metro Catcher
     url: https://metrocatcher.com
     icon: 1f687.svg
-    summary: When's the next train coming? Should you run to catch it?
+    summary: When's the train coming? Should you run to catch it?
   - title: United Statemojis
     url: https://brendansudol.com/emoji-usa/viz/top4/
     icon: 1f1fa-1f1f2.svg
-    summary: Explore emoji usage on Twitter by U.S. state.
+    summary: A visualization of Twitter emoji usage by state.
   - title: Hi-Lo Practice
     url: https://brendansudol.github.io/card-counting-game/
     icon: 1f3b0.svg
@@ -98,10 +98,6 @@ mini_projects:
     url: http://brendansudol.github.io/find-emoji/
     icon: 1f9d0.svg
     summary: A fast, simple game to find the one shared emoji.
-  - title: College Rankings
-    url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
-    icon: 1f393.svg
-    summary: Create your own Top Colleges list based on your interests.
   - title: Presidential Pick'em
     url: https://brendansudol.com/electoral-map-viz
     icon: 1f5f3.svg
@@ -110,6 +106,10 @@ mini_projects:
     url: https://brendansudol.com/alpha-bravo-charlie/#abc=nato&txt=WTF!
     icon: 1f524.svg
     summary: Convert words and phrases to a phonetic alphabet.
+  - title: College Rankings
+    url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
+    icon: 1f393.svg
+    summary: Create your own Top Colleges list based on your interests.
   - title: English ➝ Emoji
     url: http://emojist.com/?q=boom
     icon: 1f4ac.svg
