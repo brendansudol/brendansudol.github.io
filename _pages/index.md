@@ -4,9 +4,10 @@ permalink: /
 is_wide: true
 ---
 
-<p class='mb4 h3 measure'>
-  Hello! I’m Brendan. I'm a software engineer based in Washington, D.C.
-  I love building things on the web. I also really like to read and play golf.
+<p class='mb4 sm-h3 measure'>
+  Hello, I'm Brendan! I'm a software engineer based in Washington, D.C.
+  I'm interested in data visualization, machine learning, generative design,
+  and building fun things on the web. I also really like to golf.
 </p>
 
 <h2 class='mb3 h5 caps'>Projects</h2>

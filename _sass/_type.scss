@@ -6,7 +6,11 @@ h3, .h3 { font-size: $h3; }
 h4, .h4 { font-size: $h4; }
 h5, .h5 { font-size: $h5; }
 h6, .h6 { font-size: $h6; }
-@media #{$breakpoint-sm} { .sm-h0 { font-size: $h0; } }
+
+@media #{$breakpoint-sm} {
+  .sm-h0 { font-size: $h0; }
+  .sm-h3 { font-size: $h3; }
+}
 
 .bold { font-weight: $bold-font-weight; }
 .extra-bold { font-weight: 800; }
@@ -22,4 +26,4 @@ h6, .h6 { font-size: $h6; }
 .serif { font-family: $serif-font-family; }
 .sans-serif { font-family: $sans-serif-font-family; }
 .mono, .monospace { font-family: $monospace-font-family; }
-.measure { max-width: 28em; }
+.measure { max-width: 27em; }

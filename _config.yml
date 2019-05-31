@@ -110,10 +110,6 @@ mini_projects:
     url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
     icon: 1f393.svg
     summary: Create your own Top Colleges list based on your interests.
-  - title: English ➝ Emoji
-    url: http://emojist.com/?q=boom
-    icon: 1f4ac.svg
-    summary: Translate boring English into awesome Emoji.
 
 work_in_progress:
   - title: Circles
@@ -137,3 +133,7 @@ defunct:
       "Protecting the English language, one tweet at a time: a twitter
       bot that searches for and corrects those who make small spelling
       and grammar mistakes."
+  - title: English ➝ Emoji
+    url: http://emojist.com/?q=boom
+    icon: 1f4ac.svg
+    summary: Translate boring English into awesome Emoji.
