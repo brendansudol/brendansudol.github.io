@@ -36,6 +36,10 @@ exclude:
   - webpack.config.js
 
 projects:
+  - title: Scrantonicity
+    url: https://scrantonicity.co
+    summary: Rediscover every episode and every line from The Office.
+    icon: 1f468-1f3fb-200d-1f4bc.svg
   - title: Late Night LOL
     url: https://latenightlol.com
     summary: 35k+ monologue jokes. 10+ years. All your favorite hosts.
@@ -52,6 +56,14 @@ projects:
     url: http://betterknowyourarea.com
     icon: 1f5fa.svg
     summary: Explore social, economic, and housing data in the USA.
+  - title: Uncoverly
+    url: http://www.uncoverly.com
+    icon: 1f9f6.svg
+    summary: Discover the best and most beautiful products on Etsy.
+  - title: Presidential Pick'em
+    url: https://brendansudol.com/electoral-map-viz
+    icon: 1f5f3.svg
+    summary: Create your own presidential election forecast.
   - title: DC Food Trucks Today
     url: http://dcfoodtrucks.today
     icon: 1f69a.svg
@@ -60,12 +72,6 @@ projects:
     url: http://www.jeopractice.com
     icon: 1f4da.svg
     summary: Practice Jeopardy! questions from 30+ years of shows.
-  - title: Uncoverly
-    url: http://www.uncoverly.com
-    icon: 1f9f6.svg
-    summary: Discover the best and most beautiful products on Etsy.
-
-mini_projects:
   - title: The Winterfallen
     url: https://thewinterfallen.com
     icon: night-king.png
@@ -73,7 +79,7 @@ mini_projects:
   - title: Emotion Extractor
     url: https://brendansudol.com/faces/
     icon: 1f3ad.svg
-    summary: Detect faces and classify emotions with Tensorflow.js. 
+    summary: Detect faces and classify emotions with Tensorflow.js.
   - title: Team Coco
     url: https://brendansudol.github.io/conan-jokes/
     icon: conan.png
@@ -98,10 +104,6 @@ mini_projects:
     url: http://brendansudol.github.io/find-emoji/
     icon: 1f9d0.svg
     summary: A fast, simple game to find the one shared emoji.
-  - title: Presidential Pick'em
-    url: https://brendansudol.com/electoral-map-viz
-    icon: 1f5f3.svg
-    summary: Create your own presidential election forecast.
   - title: Alpha Bravo Charlie
     url: https://brendansudol.com/alpha-bravo-charlie/#abc=nato&txt=WTF!
     icon: 1f524.svg
