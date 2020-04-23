@@ -36,6 +36,10 @@ exclude:
   - webpack.config.js
 
 projects:
+  - title: Tradecraft
+    url: https://tradecraft.fun
+    summary: An online version of Codenames (that syncs across devices).
+    icon: 1f575-1f3fb-200d-2642-fe0f.svg
   - title: Scrantonicity
     url: https://scrantonicity.co
     summary: Rediscover every episode and every line from The Office.
@@ -47,7 +51,7 @@ projects:
   - title: Wemoji
     url: https://getwemoji.com
     icon: clapping-hands-sign.gif
-    summary: Animated, inclusive emojis. We're better together.
+    summary: Animated and inclusive emojis. We're better together.
   - title: Vinobot
     url: http://www.vinobot.co
     icon: 1f377.svg
