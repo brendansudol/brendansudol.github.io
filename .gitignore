@@ -5,6 +5,7 @@
 node_modules
 venv
 
+package-lock.json
 npm-debug.log*
 
 _drafts

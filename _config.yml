@@ -38,7 +38,7 @@ exclude:
 projects:
   - title: Tradecraft
     url: https://tradecraft.fun
-    summary: An online version of Codenames (that syncs across devices).
+    summary: A web-based version of the word game Codenames.
     icon: 1f575-1f3fb-200d-2642-fe0f.svg
   - title: Scrantonicity
     url: https://scrantonicity.co

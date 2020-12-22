@@ -5,11 +5,10 @@ is_wide: true
 ---
 
 <p class='mb4 sm-h3 measure'>
-  Hi, I'm Brendan! I'm a software engineer based in Washington DC. I like building things on the web and playing golf.
+  Hi there! I'm a software engineer based in the Washington DC area. I like building things on the web and playing golf. Here's a motley collection of some personal projects:
 </p>
 
-<h2 class='pt1 mb3 h5 caps'>A few things I've made:</h2>
-<div class='mb3 flex flex-wrap mxn2'>
+<div class='py2 flex flex-wrap mxn2'>
   {% for project in site.projects %}
     <div class='flex col-6 sm-col-4 px2 mb3'>
       <div class='sm-flex'>

@@ -12,13 +12,13 @@ var formatNum = d3.format(',.0f'),
 var minute_selected = 45
 
 var margin = {
-  top: 20,
-  right: 80,
+  top: 30,
+  right: 20,
   bottom: 40,
   left: 50,
 },
-  width = 900 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom
+  width = 500 - margin.left - margin.right,
+  height = 350 - margin.top - margin.bottom
 
 // Add path interpolator to d3 for nicer
 // transitioning for different sized datasets
@@ -220,7 +220,7 @@ d3.csv('/assets/data/soccer-outcome-probs.csv', function(error, data) {
         prob_col = make_col(g_diff_adj, outcome),
         ct_col = make_col(g_diff_adj, 'tot_games')
 
-      values = []
+      var values = []
       data.forEach(function(d) {
         if (+d[ct_col] > MIN_GAMES) {
           values.push({
@@ -279,7 +279,7 @@ d3.csv('/assets/data/soccer-outcome-probs.csv', function(error, data) {
       })
     })
 
-    ct_output = d3.select('#game-ct')
+    var ct_output = d3.select('#game-ct')
     ct_output.text(function() {
       return probs.ct && probs.ct > 0 ? formatNum(probs.ct) : '-'
     })
