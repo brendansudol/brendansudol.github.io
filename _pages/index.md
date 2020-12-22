@@ -16,7 +16,7 @@ is_wide: true
           {% if project.icon contains '.svg' %}
             {% include svg/icon/{{ project.icon }} %}
           {% else %}
-            <img src="{{ project.icon | prepend: '/assets/img/icon/' }}" />
+            <img src="{{ project.icon | prepend: '/assets/img/misc/' }}" />
           {% endif %}
         </a>
         <div class='flex-auto'>
