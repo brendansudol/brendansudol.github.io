@@ -1,3 +1,5 @@
-**my little online home**
+💻🏠
+
+my little online home
 
 brendansudol.com
