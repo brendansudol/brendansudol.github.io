@@ -60,6 +60,10 @@ projects:
     url: http://betterknowyourarea.com
     icon: 1f5fa.svg
     summary: Explore social, economic, and housing data in the USA.
+  - title: The NitPickster
+    url: https://nitpickster.vercel.app/
+    icon: 1f989.svg
+    summary: Protecting the English language, one tweet at a time.
   - title: Uncoverly
     url: http://www.uncoverly.com
     icon: 1f9f6.svg
