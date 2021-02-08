@@ -36,22 +36,26 @@ exclude:
   - webpack.config.js
 
 projects:
+  - title: Smartful
+    url: https://getsmartful.com/
+    summary: Learn something new every day.
+    icon: 1f913.svg
   - title: Tradecraft
     url: https://tradecraft.fun
-    summary: A web-based version of the word game Codenames.
+    summary: A web-based version of Codenames.
     icon: 1f575-1f3fb-200d-2642-fe0f.svg
   - title: Scrantonicity
     url: https://scrantonicity.co
-    summary: Rediscover every episode and every line from The Office.
+    summary: Rediscover every line from The Office.
     icon: 1f468-1f3fb-200d-1f4bc.svg
-  - title: Late Night LOL
-    url: https://latenightlol.com
-    summary: 35k+ monologue jokes. 10+ years. All your favorite hosts.
-    icon: 1f923.svg
   - title: Wemoji
     url: https://getwemoji.com
     icon: clapping-hands-sign.gif
     summary: Animated and inclusive emojis. We're better together.
+  - title: Late Night LOL
+    url: https://latenightlol.com
+    summary: 35k+ monologue jokes. All your favorite hosts.
+    icon: 1f923.svg
   - title: Vinobot
     url: http://www.vinobot.co
     icon: 1f377.svg

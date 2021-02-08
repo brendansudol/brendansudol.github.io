@@ -5,7 +5,7 @@ is_wide: true
 ---
 
 <p class='mb4 sm-h3 measure'>
-  Hi there! I'm a software engineer based in the Washington DC area. I like building things on the web and playing golf. Here's a hodgepodge of some personal projects:
+  Hello! I'm a DC-based software engineer. I like building things on the web and playing golf. Here's a hodgepodge of some personal projects:
 </p>
 
 <div class='py2 flex flex-wrap mxn2'>
