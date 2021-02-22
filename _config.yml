@@ -38,20 +38,20 @@ exclude:
 projects:
   - title: Smartful
     url: https://getsmartful.com/
-    summary: Learn something new every day.
+    summary: Learn something new and interesting every day.
     icon: 1f913.svg
   - title: Tradecraft
     url: https://tradecraft.fun
-    summary: A web-based version of Codenames.
+    summary: Play Codenames with your friends online.
     icon: 1f575-1f3fb-200d-2642-fe0f.svg
   - title: Scrantonicity
     url: https://scrantonicity.co
-    summary: Rediscover every line from The Office.
+    summary: Rediscover your favorites lines from The Office.
     icon: 1f468-1f3fb-200d-1f4bc.svg
   - title: Wemoji
     url: https://getwemoji.com
     icon: clapping-hands-sign.gif
-    summary: Animated and inclusive emojis. We're better together.
+    summary: Animated, inclusive emojis. We're better together.
   - title: Late Night LOL
     url: https://latenightlol.com
     summary: 35k+ monologue jokes. All your favorite hosts.
@@ -63,7 +63,7 @@ projects:
   - title: Better Know Your Area
     url: http://betterknowyourarea.com
     icon: 1f5fa.svg
-    summary: Explore social, economic, and housing data in the USA.
+    summary: Explore social, economic, & housing data in the USA.
   - title: The NitPickster
     url: https://nitpickster.vercel.app/
     icon: 1f989.svg
@@ -79,7 +79,7 @@ projects:
   - title: DC Food Trucks Today
     url: http://dcfoodtrucks.today
     icon: 1f69a.svg
-    summary: A real-time(ish) map of yummy food trucks in the DC area.
+    summary: A real-time(ish) map of food trucks in the DC area.
   - title: Jeopractice
     url: http://www.jeopractice.com
     icon: 1f4da.svg
@@ -91,7 +91,7 @@ projects:
   - title: Emotion Extractor
     url: https://brendansudol.com/faces/
     icon: 1f3ad.svg
-    summary: Detect faces and classify emotions with Tensorflow.js.
+    summary: Detect faces and emotions with Tensorflow.js.
   - title: Team Coco
     url: https://brendansudol.github.io/conan-jokes/
     icon: conan.png
@@ -115,7 +115,7 @@ projects:
   - title: Spot it - Emoji Edition
     url: http://brendansudol.github.io/find-emoji/
     icon: 1f9d0.svg
-    summary: A fast, simple game to find the one shared emoji.
+    summary: A fun, simple game to find the one shared emoji.
   - title: Alpha Bravo Charlie
     url: https://brendansudol.com/alpha-bravo-charlie/#abc=nato&txt=WTF!
     icon: 1f524.svg
@@ -123,7 +123,7 @@ projects:
   - title: College Rankings
     url: http://brendansudol.github.io/college-scorecard-rankings/?c150_4_pooled=1&md_earn_wne_p10=2&pctpell=1
     icon: 1f393.svg
-    summary: Create your own Top Colleges list based on your interests.
+    summary: Create your own "Top Colleges" ranking.
 
 work_in_progress:
   - title: Circles

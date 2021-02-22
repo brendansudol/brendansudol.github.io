@@ -29,6 +29,14 @@
   <meta name="twitter:url" content="{{ site.url }}{{ page.url | replace:'index.html','' }}">
   <meta name="twitter:image" content="{{ site.url }}{% if page.share_img %}{{ page.share_img }}{% else %}/assets/img/misc/bren-doodle-color.png{% endif %}">
 
+  <link
+    rel="preload"
+    href="/assets/fonts/iAWriterQuattroS-Regular.woff2"
+    as="font"
+    type="font/woff2"
+    crossOrigin="anonymous"
+  />
+
   {% if page.layout == 'post' or page.all_css %}
     <link rel="stylesheet" href="{{ '/assets/css/all.css' | prepend: site.baseurl }}?{{ site.time | date: '%Y%m%d%H%M' }}">
   {% else %}

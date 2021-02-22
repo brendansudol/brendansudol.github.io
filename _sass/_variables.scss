@@ -31,10 +31,10 @@ $breakpoint-lg: '(min-width: 64em)' !default;
 
 $serif-font-family: georgia, times, serif !default;
 $sans-serif-font-family: -apple-system, BlinkMacSystemFont, helvetica, sans-serif !default;
-$monospace-font-family: consolas, courier, monospace !default;
+$monospace-font-family: quattro, consolas, courier, monospace !default;
 $bold-font-weight: 600 !default;
 
-$heading-font-family: $sans-serif-font-family !default;
+$heading-font-family: $monospace-font-family !default;
 $heading-font-weight: $bold-font-weight !default;
 $heading-line-height: 1.25 !default;
 $heading-margin-top: 1em !default;
