@@ -4,13 +4,13 @@ permalink: /
 is_wide: true
 ---
 
-<p class='mb4 sm-h3 measure'>
-  Hello! I'm a software engineer based in Washington DC. I really like building things on the web and playing golf. Here's a hodgepodge of some personal projects:
+<p class='mb4 measure'>
+  Hello! I'm Brendan. I'm a software engineer based in Washington DC. I really like building things on the web. Here's a hodgepodge of some of my silly, personal projects:
 </p>
 
 <div class='py3 flex flex-wrap mxn2'>
   {% for project in site.projects %}
-    <div class='flex col-6 sm-col-4 px2 mb3'>
+    <div class='flex col-6 sm-col-4 px2 mb4'>
       <div class='sm-flex'>
         <a class='flex-none block icon-container' href='{{ project.url }}'>
           {% if project.icon contains '.svg' %}
