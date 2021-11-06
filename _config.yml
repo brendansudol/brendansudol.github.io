@@ -36,9 +36,13 @@ exclude:
   - webpack.config.js
 
 projects:
+  - title: Zigs
+    url: https://brendansudol.com/zigs
+    summary: A curvy, colorful generative art experiment.
+    icon: 1f3a8.svg
   - title: Smartful
     url: https://getsmartful.com/
-    summary: Learn something new and interesting every day.
+    summary: Learn something new every day.
     icon: 1f913.svg
   - title: Tradecraft
     url: https://tradecraft.fun
