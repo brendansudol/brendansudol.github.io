@@ -1,5 +1,3 @@
 💻🏠
 
-my little online home
-
-brendansudol.com
+my little (deprecated) online home
