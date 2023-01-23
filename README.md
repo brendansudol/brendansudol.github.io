@@ -1,3 +1,3 @@
-💻🏠
+🚨 **no longer maintained** 🚨
 
-my (deprecated) online home
+my little (now deprecated) blog
