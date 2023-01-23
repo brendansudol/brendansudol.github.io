@@ -1,3 +1,3 @@
 💻🏠
 
-my little (deprecated) online home
+my (deprecated) online home
