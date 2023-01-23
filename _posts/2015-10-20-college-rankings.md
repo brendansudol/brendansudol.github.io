@@ -30,12 +30,12 @@ bottom) colleges list. You can select from up to eight different variables (for
 now) and assign weights from 'not important' to 'very important'. Give it a
 whirl [here][college_rankings], and let me know what you think!
 
-[brendansudol.com/college-scorecard-rankings][college_rankings]
+[brendansudol.github.io/college-scorecard-rankings][college_rankings]
 
 And if you're curious about the code behind it, I made it using [ReactJS][react]
 and everything is on [GitHub][source_code].
 
-[college_rankings]: http://www.brendansudol.com/college-scorecard-rankings
+[college_rankings]: https://brendansudol.github.io/college-scorecard-rankings
 [scorecard]: https://collegescorecard.ed.gov/
 [pr]: http://www.ed.gov/news/press-releases/education-department-releases-college-scorecard-help-students-choose-best-college-them
 [documentation]: https://collegescorecard.ed.gov/data/documentation/

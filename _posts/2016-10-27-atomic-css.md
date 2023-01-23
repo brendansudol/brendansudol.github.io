@@ -12,7 +12,7 @@ presentational classes, which can be combined to create a highly flexible and
 expressive array of new UI components without adding to or even touching a
 stylesheet. It's a simple, fast, and fun way to build websites.
 
-The full presentation is [here](https://brendansudol.com/decks/atomic-css), or
+The full presentation is [here](https://brendansudol.github.io/decks/atomic-css), or
 you can preview it below! ⚛
 
-<iframe class='border rounded iframe-deck' src='https://brendansudol.com/decks/atomic-css/#/'></iframe>
+<iframe class='border rounded iframe-deck' src='https://brendansudol.github.io/decks/atomic-css/#/'></iframe>

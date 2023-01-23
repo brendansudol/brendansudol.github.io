@@ -7,11 +7,11 @@ date: 2017-06-09
 How does emoji usage on Twitter differ across the United States? Great question!
 Let's explore...
 
-<a class="py1 block" href="https://brendansudol.com/emoji-usa/viz/top4/">
+<a class="py1 block" href="https://brendansudol.github.io/emoji-usa/viz/top4/">
   <img class="p1 border-box border rounded" src="/assets/img/writing/united-statemojis.png">
 </a>
 
-[Here's a larger version](https://brendansudol.com/emoji-usa/viz/top4/) of this
+[Here's a larger version](https://brendansudol.github.io/emoji-usa/viz/top4/) of this
 map, created with d3.js. In addition, all of the code for this analysis is on
 [GitHub](https://github.com/brendansudol/emoji-usa).
 
@@ -41,8 +41,8 @@ but is often offset by the frequency of the word in the corpus, which helps to
 adjust for the fact that some words appear more frequently in general.”
 
 With emojis ranked by tf-idf, the maps
-([top 1](https://brendansudol.com/emoji-usa/viz/top1/),
-[top 4](https://brendansudol.com/emoji-usa/viz/top4/), also see image above) are
+([top 1](https://brendansudol.github.io/emoji-usa/viz/top1/),
+[top 4](https://brendansudol.github.io/emoji-usa/viz/top4/), also see image above) are
 a lot more interesting. I love seeing emojis for a state match up with things I
 associate with that state, like the mountains (🏔) in Alaska and Colorado,
 volcano (🌋) in Hawaii, shamrock (☘) in Massachusetts, and checkered flag (🏁)

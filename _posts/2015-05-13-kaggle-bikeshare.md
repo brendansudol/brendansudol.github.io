@@ -36,7 +36,7 @@ you arrive at a good model and result (top 5% of entries as of this post):
 
 Enough with the chit chat, here's the code (github repo [here][github_repo]):
 
-[titanic_post]: http://www.brendansudol.com/posts/kaggle-titanic/
+[titanic_post]: https://brendansudol.github.io/posts/kaggle-titanic/
 [kaggle_bike]: https://www.kaggle.com/c/bike-sharing-demand
 [capital_bike]: http://www.capitalbikeshare.com/system-data
 [github_repo]: https://github.com/brendansudol/kaggle-bike-share

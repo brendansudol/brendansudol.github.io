@@ -1,6 +1,7 @@
 .sass-cache
 .jekyll-metadata
 .DS_Store
+.vscode
 
 node_modules
 venv

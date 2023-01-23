@@ -24,7 +24,7 @@ If you like it, you can share it with friends or, my favorite feature, have Siri
 speak it aloud. If you're not a fan, you can generate a new, random note.
 
 I made this (my first iOS app!) using React Native (which is
-[unbelievably awesome](http://www.brendansudol.com/writing/react-native-baby-steps)
+[unbelievably awesome](https://brendansudol.github.io/writing/react-native-baby-steps)
 btw). As always, the code is on
 [GitHub](https://github.com/brendansudol/vinobot).
 

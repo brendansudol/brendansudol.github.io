@@ -321,5 +321,5 @@ in more with React!
 [tutorial5]: http://blog.tryolabs.com/2015/04/07/react-examples-mailbox/
 [tutorial6]: http://reactfordesigners.com/labs/reactjs-introduction-for-people-who-know-just-enough-jquery-to-get-by/
 [tutorial_repo]: https://github.com/brendansudol/react-sandbox
-[demo]: http://www.brendansudol.com/react-d3-histogram/example/
+[demo]: https://brendansudol.github.io/react-d3-histogram/example/
 [histogram_repo]: https://github.com/brendansudol/react-d3-histogram

@@ -14,7 +14,7 @@ periodic times during the meeting. Now I can do that :)
 
 ![Example](/assets/img/writing/emotions.png){: .my3.border }
 
-[https://brendansudol.com/faces/](https://brendansudol.com/faces/)
+[https://brendansudol.github.io/faces/](https://brendansudol.github.io/faces/)
 
 Here's a brief rundown of the key components of this project:
 
@@ -65,6 +65,6 @@ your browser window).
 
 That's about it. Check it out and let me know what you think!
 
-[https://brendansudol.com/faces/](https://brendansudol.com/faces/)
+[https://brendansudol.github.io/faces/](https://brendansudol.github.io/faces/)
 
 😄😐🙁
